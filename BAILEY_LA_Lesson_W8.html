@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐯 Bailey's Wildlife Words Quest — Unit 8 LA | KingCretot Experience</title>
+<style>
+  :root{
+    --navy:#1B2C5C; --gold:#E0AC3C; --jungle:#1F8A4F; --sunset:#E85D2C;
+    --teal:#0E9F9A; --plum:#6F3F8F; --sand:#FBF4E0; --ink:#1f2937;
+    --ok:#2e9d4a; --bad:#dc2626; --shadow:0 4px 14px rgba(27,44,92,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Fredoka+One&family=Patrick+Hand&display=swap');
+  html,body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FBF4E0 0%,#E8F0DD 50%,#E5F4F4 100%);color:var(--ink);min-height:100vh;font-size:17px;line-height:1.55}
+
+  .hud{position:fixed;top:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),#0f1a3a);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:var(--shadow);flex-wrap:wrap;gap:8px}
+  .hud-left{display:flex;align-items:center;gap:12px;font-family:'Fredoka One',cursive;font-size:1.15rem}
+  .hud-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .stat{background:rgba(255,255,255,.13);padding:6px 14px;border-radius:20px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:6px}
+  .xpbar{width:130px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}
+  .xpfill{height:100%;background:linear-gradient(90deg,var(--gold),#FFD86F);transition:width .4s;width:0%}
+
+  .wrap{max-width:880px;margin:80px auto 30px;padding:14px}
+  .slide{background:#fff;border-radius:20px;padding:26px;box-shadow:var(--shadow);min-height:520px;display:none;animation:pop .35s ease}
+  .slide.active{display:block}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+  h1{font-family:'Bangers',cursive;font-size:2.4rem;color:var(--navy);letter-spacing:1.5px;margin-bottom:6px}
+  h2{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--navy);margin-bottom:12px}
+  h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sunset);margin:14px 0 8px}
+  p{margin-bottom:10px;font-size:1rem}
+
+  .badge{display:inline-block;padding:5px 14px;border-radius:14px;font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),#F2C465);color:var(--navy);margin-bottom:8px}
+
+  .btn{padding:13px 26px;border-radius:14px;font-weight:900;border:none;cursor:pointer;font-family:inherit;font-size:1rem;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+  .btn-go{background:linear-gradient(135deg,var(--plum),#4f2a6b);color:#fff;box-shadow:0 4px 0 #3a1d52}
+  .btn-go:hover{transform:translateY(-2px)}
+  .btn-back{background:#e5e7eb;color:#374151}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:10px;flex-wrap:wrap}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dot{width:11px;height:11px;border-radius:50%;background:#cbd5e1;transition:all .2s}
+  .dot.on{background:var(--gold);transform:scale(1.4)}
+  .dot.done{background:var(--plum)}
+
+  .mascot-row{display:flex;justify-content:center;gap:14px;font-size:3rem;margin:10px 0 18px;flex-wrap:wrap}
+  .mascot{display:inline-block;animation:bob 2.6s ease-in-out infinite}
+  .mascot:nth-child(2){animation-delay:.3s}
+  .mascot:nth-child(3){animation-delay:.6s}
+  .mascot:nth-child(4){animation-delay:.9s}
+  .mascot:nth-child(5){animation-delay:1.2s}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+
+  .card{background:#FBF4E0;border:3px solid #F0E1B5;border-radius:18px;padding:16px;margin:12px 0}
+  .card-teal{background:#E5F4F4;border-color:#A8DEDC}
+  .card-jungle{background:#E8F5EC;border-color:#B5DDC5}
+  .card-sunset{background:#FFF0E8;border-color:#FFD0BB}
+  .card-plum{background:#F2EAF5;border-color:#D5BFE0}
+
+  .qbox{background:#fff;border:3px solid #E2E8F0;border-radius:16px;padding:18px;margin:14px 0;transition:border-color .25s}
+  .qbox.ok{border-color:var(--ok);background:#F0FBF3}
+  .qbox.bad{border-color:var(--bad);background:#FEF2F2}
+  .qprompt{font-weight:800;font-size:1.05rem;margin-bottom:12px;color:var(--navy)}
+  .opts{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+  .opt{background:#fff;border:3px solid #cbd5e1;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;text-align:left;font-family:inherit;font-size:.98rem;transition:all .15s}
+  .opt:hover{border-color:var(--gold);background:#FBF4E0;transform:translateY(-2px)}
+  .opt.right{background:#D9F7E1;border-color:var(--ok);color:#065f46}
+  .opt.wrong{background:#FFE2E2;border-color:var(--bad);color:#991b1b}
+  .opt:disabled{cursor:not-allowed}
+  .feedback{margin-top:10px;padding:12px;border-radius:10px;font-weight:700;font-size:.95rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#D9F7E1;color:#065f46}
+  .feedback.bad{background:#FFE2E2;color:#991b1b}
+
+  .fillrow{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;background:#FBF4E0;padding:10px 14px;border-radius:12px;border:2px dashed var(--sunset)}
+  .fillrow input,.fillrow textarea{font-family:inherit;font-size:1rem;font-weight:700;padding:8px 12px;border:2px solid #cbd5e1;border-radius:9px;background:#fff;width:300px}
+  .fillrow textarea{min-height:80px;resize:vertical}
+  .fillrow input.ok,.fillrow textarea.ok{border-color:var(--ok);background:#D9F7E1}
+  .checkbtn{padding:9px 18px;border-radius:10px;border:none;background:var(--sunset);color:#fff;font-weight:900;cursor:pointer;font-family:inherit}
+
+  .passage{background:linear-gradient(180deg,#FFFAEC,#fff);border:3px dashed var(--sunset);border-radius:16px;padding:22px;margin:16px 0;font-family:'Patrick Hand',cursive;font-size:1.12rem;line-height:1.7;color:#2d2a22;box-shadow:inset 0 0 30px rgba(232,93,44,.06)}
+  .passage h4{font-family:'Bangers',cursive;color:var(--plum);font-size:1.5rem;margin-bottom:10px;letter-spacing:1.5px}
+  .passage p{font-size:1.12rem;margin-bottom:10px}
+
+  /* ===== Plot mountain ===== */
+  .plot-mountain{display:grid;grid-template-columns:repeat(5, 1fr);gap:6px;margin:14px 0}
+  @media(max-width:600px){.plot-mountain{grid-template-columns:1fr}}
+  .plot-step{padding:12px 8px;border-radius:12px;text-align:center;font-weight:800;color:#fff;font-size:.85rem;line-height:1.3}
+  .plot-step .icon{font-size:1.6rem;display:block;margin-bottom:4px}
+  .plot-1{background:linear-gradient(135deg,#5DA85A,#3D8A30)}
+  .plot-2{background:linear-gradient(135deg,#FFB675,#FF9447)}
+  .plot-3{background:linear-gradient(135deg,#E85D2C,#9c2f1a)}
+  .plot-4{background:linear-gradient(135deg,#0E9F9A,#076763)}
+  .plot-5{background:linear-gradient(135deg,#6F3F8F,#4f2a6b)}
+
+  /* ===== PIE chart ===== */
+  .pie-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:14px 0}
+  @media(max-width:600px){.pie-row{grid-template-columns:1fr}}
+  .pie-card{padding:14px;border-radius:14px;text-align:center;font-weight:800;color:#fff}
+  .pie-P{background:linear-gradient(135deg,#E85D2C,#9c2f1a)}
+  .pie-I{background:linear-gradient(135deg,#0E9F9A,#076763)}
+  .pie-E{background:linear-gradient(135deg,#6F3F8F,#4f2a6b)}
+  .pie-card .pie-letter{font-family:'Bangers',cursive;font-size:2.5rem;display:block}
+
+  /* ===== Cause & Effect chain ===== */
+  .ce-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+  .ce-box{background:#fff;border:3px solid var(--gold);border-radius:14px;padding:12px 18px;font-weight:800;flex:1;min-width:200px;text-align:center}
+  .ce-arrow{font-size:2rem;color:var(--sunset)}
+
+  /* ===== Effects ===== */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:200;display:none}
+  .conf-piece{position:absolute;width:10px;height:10px;animation:fall 1.6s linear forwards}
+  @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+  #xover{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:150;pointer-events:none}
+  #xover.show{display:flex;animation:xpop .55s ease-out}
+  #xover .x{font-size:9rem;color:var(--bad);font-weight:900;text-shadow:0 0 24px rgba(220,38,38,.5)}
+  @keyframes xpop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:0}}
+
+  .quote{font-style:italic;text-align:center;font-size:1.1rem;color:var(--navy);background:linear-gradient(135deg,#FBF4E0,#F0E1B5);padding:18px;border-radius:16px;border-left:6px solid var(--gold);margin:20px 0}
+
+  .review-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}
+  @media(min-width:600px){.review-grid{grid-template-columns:1fr 1fr}}
+  .review-card{background:linear-gradient(135deg,#FBF4E0,#fffaf0);border:3px solid #F0E1B5;border-radius:14px;padding:14px;font-weight:700;font-size:.98rem}
+  .review-card strong{color:var(--sunset);display:block;margin-bottom:4px}
+
+  .footer-tag{text-align:center;color:#64748b;font-size:.82rem;margin-top:14px;font-weight:700}
+  .keyword-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .keyword{background:linear-gradient(135deg,var(--plum),#4f2a6b);color:#fff;padding:5px 12px;border-radius:14px;font-weight:800;font-size:.88rem}
+</style>
+</head>
+<body>
+
+<!-- ===== HUD ===== -->
+<div class="hud">
+  <div class="hud-left">🐯 Bailey's Wildlife Words — Unit 8</div>
+  <div class="hud-right">
+    <div class="stat"><span class="ico">⭐</span><span id="xpVal">0</span> XP</div>
+    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+    <div class="stat"><span class="ico">🪙</span><span id="coinVal">0</span></div>
+    <div class="stat"><span class="ico">🏆</span> Lvl <span id="lvlVal">1</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+<!-- ===== Slide 0: Welcome ===== -->
+<div class="slide active" id="s0">
+  <span class="badge">🐯 Unit 8 · Word Safari!</span>
+  <h1>🐯 Welcome Back, Bailey!</h1>
+  <div class="mascot-row">🐯 🐺 🦅 🐊 🦓</div>
+  <div class="card card-teal">
+    <p style="font-size:1.1rem"><strong>The final stretch of the trail!</strong> Last week you uncovered theme, point of view, and figurative language. This week we pinpoint the <em>main idea</em>, <em>compare two texts</em>, build words with <em>roots and affixes</em>, and write a strong <em>RACE response</em>. Let's finish strong!</p>
+  </div>
+  <h3>🎯 What you'll learn today:</h3>
+  <div class="review-grid">
+    <div class="review-card"><strong>🎯 Main Idea & Details</strong>What a text is mostly about</div>
+    <div class="review-card"><strong>⚖️ Compare & Contrast</strong>How two texts are alike and different</div>
+    <div class="review-card"><strong>🧱 Prefixes, Suffixes, Roots</strong>Building and breaking apart words</div>
+    <div class="review-card"><strong>✍️ RACE Response</strong>Writing a strong text answer</div>
+  </div>
+  <div class="card card-sunset">
+    <p>🎮 <strong>How to win XP:</strong> Get answers right to earn ⭐ XP and 🪙 coins. Tap an answer to lock it in!</p>
+  </div>
+  <div class="nav">
+    <span></span>
+    <button class="btn btn-go" onclick="go(1)">Let's Begin! 🚀</button>
+  </div>
+</div>
+<!-- ===== Slide 1: Review ===== -->
+<div class="slide" id="s1">
+  <span class="badge">🔁 Quick Review</span>
+  <h2>Warm-Up: From Unit 7</h2>
+  <p>Let's warm up our word brains before the last leg of the safari! 🧠✨</p>
+
+  <div class="qbox" data-q="r1">
+    <div class="qprompt">🎯 The theme of a story is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">the setting</button>
+      <button class="opt" data-i="1" data-c="0">the title</button>
+      <button class="opt" data-i="2" data-c="0">the page count</button>
+      <button class="opt" data-i="3" data-c="1">the lesson or message it teaches</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r2">
+    <div class="qprompt">👁️ A story told with "I" and "me" is in —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">first person</button>
+      <button class="opt" data-i="1" data-c="0">third person</button>
+      <button class="opt" data-i="2" data-c="0">second person</button>
+      <button class="opt" data-i="3" data-c="0">no point of view</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r3">
+    <div class="qprompt">🌈 "The wind was a howling wolf." This is a —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">simile</button>
+      <button class="opt" data-i="1" data-c="0">heading</button>
+      <button class="opt" data-i="2" data-c="0">summary</button>
+      <button class="opt" data-i="3" data-c="1">metaphor</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r4">
+    <div class="qprompt">📝 A summary should be —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">longer than the text</button>
+      <button class="opt" data-i="1" data-c="1">short and focused on main ideas</button>
+      <button class="opt" data-i="2" data-c="0">a list of every detail</button>
+      <button class="opt" data-i="3" data-c="0">only the title</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(0)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn-go" onclick="go(2)">Next: Main Idea! 🎯</button>
+  </div>
+</div>
+<!-- ===== Slide 2: What the Text Is Mostly About ===== -->
+<div class="slide" id="s2">
+  <span class="badge">🎯 Main Idea & Key Details</span>
+  <h2>What the Text Is Mostly About</h2>
+  <p>The <strong>main idea</strong> is what a passage is mostly about. <strong>Key details</strong> are the facts and examples that support and explain it. 🎯</p>
+  <div class="card card-jungle">
+    <h3>📚 Read this passage:</h3>
+    <p><strong>Built for the Hunt</strong><br>
+    Eagles are amazing hunters. Their eyes are eight times sharper than a human's, so they can spot prey from far away. Their sharp talons grip tightly. Their hooked beak tears food easily. Every part of an eagle helps it hunt.</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🧭 Main Idea vs Details</h3>
+    <p><strong>Main idea:</strong> Eagles are built to be great hunters.<br>
+    <strong>Key details:</strong> sharp eyes, strong talons, hooked beak.</p>
+  </div>
+  <div class="card card-sunset">
+    <h3>✏️ Try it!</h3>
+    <p>The facts that support the main idea are called key <strong>d______</strong>. Type the missing word. (one word)</p>
+    <div class="fillrow">
+      <span>They are called key </span>
+      <input type="text" id="mi1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('mi1','details','mi1fb')">Check</button>
+      <span id="mi1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="mi1">
+    <div class="qprompt">🎯 What is the MAIN IDEA of "Built for the Hunt"?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">Eagles are built to be great hunters</button>
+      <button class="opt" data-i="1" data-c="0">Eagles build large nests</button>
+      <button class="opt" data-i="2" data-c="0">Eagles live on cliffs</button>
+      <button class="opt" data-i="3" data-c="0">Eagles have brown feathers</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="mi2">
+    <div class="qprompt">🔍 Which is a KEY DETAIL from the passage?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">Eagles like sunny days</button>
+      <button class="opt" data-i="1" data-c="0">Eagles can swim</button>
+      <button class="opt" data-i="2" data-c="0">Eagles sing at night</button>
+      <button class="opt" data-i="3" data-c="1">Their eyes are eight times sharper than a human's</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="mi3">
+    <div class="qprompt">📖 Key details in a text are there to —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">support and explain the main idea</button>
+      <button class="opt" data-i="1" data-c="0">name the author</button>
+      <button class="opt" data-i="2" data-c="0">number the pages</button>
+      <button class="opt" data-i="3" data-c="0">decorate the cover</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(1)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(3)">Next: Compare & Contrast! ⚖️</button>
+  </div>
+</div>
+<!-- ===== Slide 3: Two Texts, Side by Side ===== -->
+<div class="slide" id="s3">
+  <span class="badge">⚖️ Compare & Contrast</span>
+  <h2>Two Texts, Side by Side</h2>
+  <p>To <strong>compare</strong> means to tell how two things are <em>alike</em>. To <strong>contrast</strong> means to tell how they are <em>different</em>. Good readers do both with two texts. ⚖️</p>
+  <div class="card card-teal">
+    <h3>📚 Two short texts:</h3>
+    <p><strong>Text A:</strong> Wolves hunt in packs. Working as a team, they can take down prey much larger than themselves.</p>
+    <p><strong>Text B:</strong> Tigers hunt alone. A tiger uses stealth and a powerful pounce to surprise its prey.</p>
+  </div>
+  <div class="card card-plum">
+    <h3>⚖️ Alike and Different</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Alike (compare)</strong>Both are predators that hunt prey</div>
+      <div class="review-card"><strong>Different (contrast)</strong>Wolves hunt in packs; tigers hunt alone</div>
+      <div class="review-card"><strong>Signal words: alike</strong>both, also, similarly, same</div>
+      <div class="review-card"><strong>Signal words: different</strong>but, however, unlike, while</div>
+    </div>
+  </div>
+  <div class="card card-sunset">
+    <h3>✏️ Try it!</h3>
+    <p>To tell how two texts are DIFFERENT, you <strong>c________</strong> them. Type the missing word. (one word)</p>
+    <div class="fillrow">
+      <span>To show differences, you </span>
+      <input type="text" id="cc1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('cc1','contrast','cc1fb')">Check</button>
+      <span id="cc1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="cc1">
+    <div class="qprompt">⚖️ How are wolves and tigers ALIKE in the texts?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">Both hunt in packs</button>
+      <button class="opt" data-i="1" data-c="1">Both are predators that hunt prey</button>
+      <button class="opt" data-i="2" data-c="0">Both hunt alone</button>
+      <button class="opt" data-i="3" data-c="0">Both live in the ocean</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="cc2">
+    <div class="qprompt">🔄 How do the texts CONTRAST wolves and tigers?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">Wolves are bigger than tigers</button>
+      <button class="opt" data-i="1" data-c="1">Wolves hunt in packs; tigers hunt alone</button>
+      <button class="opt" data-i="2" data-c="0">Tigers hunt in packs; wolves hunt alone</button>
+      <button class="opt" data-i="3" data-c="0">Both hunt the same way</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="cc3">
+    <div class="qprompt">🧩 Which word signals a CONTRAST (a difference)?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">however</button>
+      <button class="opt" data-i="1" data-c="0">also</button>
+      <button class="opt" data-i="2" data-c="0">both</button>
+      <button class="opt" data-i="3" data-c="0">similarly</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(2)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(4)">Next: Word Parts! 🧱</button>
+  </div>
+</div>
+<!-- ===== Slide 4: Building & Breaking Words ===== -->
+<div class="slide" id="s4">
+  <span class="badge">🧱 Prefixes, Suffixes & Roots</span>
+  <h2>Building & Breaking Words</h2>
+  <p>Words have parts. A <strong>root</strong> is the base. A <strong>prefix</strong> goes in front and changes meaning. A <strong>suffix</strong> goes at the end. Knowing word parts helps you unlock new words! 🧱</p>
+  <div class="card card-jungle">
+    <h3>🧩 Word Building Blocks</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Prefix</strong>front part: re- (again), un- (not), pre- (before)</div>
+      <div class="review-card"><strong>Root / Base</strong>the main word: play, view, happy</div>
+      <div class="review-card"><strong>Suffix</strong>end part: -ful (full of), -less (without), -ed</div>
+      <div class="review-card"><strong>Example</strong>un + happy = unhappy (not happy)</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🔍 Decode It</h3>
+    <p><strong>re + view = review</strong> — to view again. &nbsp; <strong>fear + less = fearless</strong> — without fear.</p>
+  </div>
+  <div class="card card-sunset">
+    <h3>✏️ Try it!</h3>
+    <p>The prefix <strong>un-</strong> means "not." So <strong>un + safe</strong> spells the word — (type one word)</p>
+    <div class="fillrow">
+      <span>un + safe = </span>
+      <input type="text" id="ps1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('ps1','unsafe','ps1fb')">Check</button>
+      <span id="ps1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="ps1">
+    <div class="qprompt">🧱 The prefix "re-" means —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">not</button>
+      <button class="opt" data-i="1" data-c="0">before</button>
+      <button class="opt" data-i="2" data-c="1">again</button>
+      <button class="opt" data-i="3" data-c="0">without</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="ps2">
+    <div class="qprompt">📖 In the word "hopeful," the suffix is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">hope-</button>
+      <button class="opt" data-i="1" data-c="1">-ful</button>
+      <button class="opt" data-i="2" data-c="0">ho-</button>
+      <button class="opt" data-i="3" data-c="0">-pe</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="ps3">
+    <div class="qprompt">🔍 The word "unkind" means —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">very kind</button>
+      <button class="opt" data-i="1" data-c="0">kind again</button>
+      <button class="opt" data-i="2" data-c="0">kind before</button>
+      <button class="opt" data-i="3" data-c="1">not kind</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(3)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(5)">Next: Text Structure! 🏗️</button>
+  </div>
+</div>
+<!-- ===== Slide 5: How a Text Is Organized ===== -->
+<div class="slide" id="s5">
+  <span class="badge">🏗️ Text Structure</span>
+  <h2>How a Text Is Organized</h2>
+  <p>Authors organize nonfiction in <strong>text structures</strong>. Spotting the structure helps you understand and remember what you read. 🏗️</p>
+  <div class="card card-teal">
+    <h3>📐 Four Common Structures</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Sequence</strong>events or steps in order</div>
+      <div class="review-card"><strong>Cause & Effect</strong>why something happens and the result</div>
+      <div class="review-card"><strong>Compare & Contrast</strong>how things are alike and different</div>
+      <div class="review-card"><strong>Problem & Solution</strong>a problem and how it is solved</div>
+    </div>
+  </div>
+  <div class="card card-plum">
+    <h3>🐊 Spot the Structure</h3>
+    <p>"Because the river dried up, the crocodiles moved downstream." This tells <em>why</em> something happened and the <em>result</em> — that is <strong>cause and effect</strong>.</p>
+  </div>
+  <div class="card card-sunset">
+    <h3>✏️ Try it!</h3>
+    <p>A text that lists steps in the order they happen uses the <strong>s________</strong> structure. Type the missing word. (one word)</p>
+    <div class="fillrow">
+      <span>Steps in order is the </span>
+      <input type="text" id="tx1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('tx1','sequence','tx1fb')">Check</button>
+      <span id="tx1fb" style="font-weight:800"></span>
+    </div> structure.
+  </div>
+
+  <div class="qbox" data-q="tx1">
+    <div class="qprompt">🏗️ A text that explains a problem and how it was fixed uses —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">sequence</button>
+      <button class="opt" data-i="1" data-c="0">compare and contrast</button>
+      <button class="opt" data-i="2" data-c="1">problem and solution</button>
+      <button class="opt" data-i="3" data-c="0">description only</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="tx2">
+    <div class="qprompt">🔄 "Because of heavy rain, the trail flooded." This shows —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">cause and effect</button>
+      <button class="opt" data-i="1" data-c="0">sequence</button>
+      <button class="opt" data-i="2" data-c="0">compare and contrast</button>
+      <button class="opt" data-i="3" data-c="0">problem and solution</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="tx3">
+    <div class="qprompt">📐 Signal words like "first, next, then, finally" point to which structure?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">cause and effect</button>
+      <button class="opt" data-i="1" data-c="0">problem and solution</button>
+      <button class="opt" data-i="2" data-c="1">sequence</button>
+      <button class="opt" data-i="3" data-c="0">compare and contrast</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(4)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(6)">Next: RACE Writing! ✍️</button>
+  </div>
+</div>
+<!-- ===== Slide 6: Writing a Strong Text Answer ===== -->
+<div class="slide" id="s6">
+  <span class="badge">✍️ RACE Response</span>
+  <h2>Writing a Strong Text Answer</h2>
+  <p><strong>RACE</strong> is a plan for answering a reading question in writing: <strong>R</strong>estate, <strong>A</strong>nswer, <strong>C</strong>ite evidence, <strong>E</strong>xplain. ✍️</p>
+  <div class="card card-jungle">
+    <h3>🏁 The RACE Steps</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>R — Restate</strong>Turn the question into a sentence</div>
+      <div class="review-card"><strong>A — Answer</strong>Give your clear answer</div>
+      <div class="review-card"><strong>C — Cite</strong>Use proof from the text</div>
+      <div class="review-card"><strong>E — Explain</strong>Tell how the proof supports your answer</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>📝 Example</h3>
+    <p><em>Question:</em> Why do wolves hunt in packs?<br>
+    <em>RACE answer:</em> Wolves hunt in packs (R) so they can catch larger prey (A). The text says working as a team lets them take down bigger animals (C). This shows teamwork makes the pack stronger hunters (E).</p>
+  </div>
+  <div class="card card-sunset">
+    <h3>✏️ Try it!</h3>
+    <p>In RACE, the letter <strong>C</strong> stands for <strong>C___</strong> — using proof from the text. Type the missing word. (one word)</p>
+    <div class="fillrow">
+      <span>C stands for </span>
+      <input type="text" id="rc1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('rc1','cite','rc1fb')">Check</button>
+      <span id="rc1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="rc1">
+    <div class="qprompt">✍️ In RACE, what does the "R" stand for?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">Read silently</button>
+      <button class="opt" data-i="1" data-c="1">Restate the question</button>
+      <button class="opt" data-i="2" data-c="0">Rush the answer</button>
+      <button class="opt" data-i="3" data-c="0">Review the cover</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="rc2">
+    <div class="qprompt">📖 The "C" in RACE reminds you to —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">cite evidence from the text</button>
+      <button class="opt" data-i="1" data-c="0">count the paragraphs</button>
+      <button class="opt" data-i="2" data-c="0">copy the title</button>
+      <button class="opt" data-i="3" data-c="0">color the page</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="rc3">
+    <div class="qprompt">🧩 Why is the "E" (Explain) step important?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">It restates the question</button>
+      <button class="opt" data-i="1" data-c="0">It ends the paragraph quickly</button>
+      <button class="opt" data-i="2" data-c="0">It names the author</button>
+      <button class="opt" data-i="3" data-c="1">It shows how the evidence supports your answer</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(5)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(7)">Final Quiz! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 7: Final Quiz ===== -->
+<div class="slide" id="s7">
+  <span class="badge">🏆 Final Challenge</span>
+  <h2>Show What You Know!</h2>
+  <p>The last challenge of the safari — track down every answer, Bailey! 🐯💪</p>
+
+  <div class="qbox" data-q="f1">
+    <div class="qprompt">🎯 The MAIN IDEA of a passage is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">the last sentence</button>
+      <button class="opt" data-i="1" data-c="1">what the text is mostly about</button>
+      <button class="opt" data-i="2" data-c="0">the page number</button>
+      <button class="opt" data-i="3" data-c="0">the author's name</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f2">
+    <div class="qprompt">🔍 Key details in a text —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">name the publisher</button>
+      <button class="opt" data-i="1" data-c="0">list the chapters</button>
+      <button class="opt" data-i="2" data-c="0">show the price</button>
+      <button class="opt" data-i="3" data-c="1">support and explain the main idea</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f3">
+    <div class="qprompt">⚖️ To CONTRAST two texts means to tell how they are —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">alike</button>
+      <button class="opt" data-i="1" data-c="0">the same length</button>
+      <button class="opt" data-i="2" data-c="1">different</button>
+      <button class="opt" data-i="3" data-c="0">written by one author</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f4">
+    <div class="qprompt">🧱 The prefix "un-" means —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">again</button>
+      <button class="opt" data-i="1" data-c="1">not</button>
+      <button class="opt" data-i="2" data-c="0">before</button>
+      <button class="opt" data-i="3" data-c="0">after</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f5">
+    <div class="qprompt">📖 In the word "careless," the suffix "-less" means —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">without</button>
+      <button class="opt" data-i="1" data-c="0">full of</button>
+      <button class="opt" data-i="2" data-c="0">again</button>
+      <button class="opt" data-i="3" data-c="0">before</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f6">
+    <div class="qprompt">🏗️ "First, then, next, finally" are signal words for which text structure?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">cause and effect</button>
+      <button class="opt" data-i="1" data-c="0">compare and contrast</button>
+      <button class="opt" data-i="2" data-c="1">sequence</button>
+      <button class="opt" data-i="3" data-c="0">problem and solution</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f7">
+    <div class="qprompt">✍️ In the RACE strategy, the "A" stands for —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">Ask a friend</button>
+      <button class="opt" data-i="1" data-c="0">Add a title</button>
+      <button class="opt" data-i="2" data-c="1">Answer the question</button>
+      <button class="opt" data-i="3" data-c="0">Avoid evidence</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(6)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(8)">Finish! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 8: Finale ===== -->
+<div class="slide" id="s8">
+  <span class="badge">🌟 You Did It!</span>
+  <h1 style="text-align:center">🎉 Trail Conquered, Bailey! 🎉</h1>
+  <div class="mascot-row">🐯 🐺 🦅 🐊 🦓</div>
+  <div class="card card-teal" style="text-align:center">
+    <h2>Your Final Score</h2>
+    <p style="font-size:2.4rem;font-family:'Bangers',cursive;color:var(--navy)">⭐ <span id="finalXP">0</span> XP · 🪙 <span id="finalCoins">0</span> coins</p>
+    <p style="font-size:1.2rem;font-weight:800;color:var(--sunset)" id="finalLvl">Champion!</p>
+  </div>
+  <div class="quote">
+    "You followed every track, decoded every word, and reached the end of the trail. A reader who works this hard can go anywhere. I am proud of you, Bailey."<br><strong>— Coach Jonathan, KingCretot Experience</strong>
+  </div>
+  <div class="card card-sunset" style="text-align:center">
+    <h3>📝 Your Mission Tonight:</h3>
+    <p>Complete your <strong>Unit 8 Post-Lesson Activity Packet</strong> with a parent or grown-up!</p>
+  </div>
+  <div class="footer-tag">🐯 KingCretot Experience · Bailey's Wildlife Words Quest · Unit 8 🐯</div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ===== Effects ===== -->
+<div id="confetti"></div>
+<div id="xover"><div class="x">✕</div></div>
+<script>
+/* ============ State ============ */
+const state = { xp:0, coins:0, lvl:1, answered:{} };
+const SLIDES = 9;
+const FINALE = 8;
+
+function updateHud(){
+  document.getElementById('xpVal').textContent = state.xp;
+  document.getElementById('coinVal').textContent = state.coins;
+  document.getElementById('lvlVal').textContent = state.lvl;
+  const pct = Math.min(100, (state.xp % 100));
+  document.getElementById('xpFill').style.width = pct + '%';
+  if (state.xp >= state.lvl * 100) state.lvl++;
+}
+function addXP(n){ state.xp += n; updateHud(); }
+function addCoins(n){ state.coins += n; updateHud(); }
+
+/* ============ Navigation ============ */
+function go(i){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+i).classList.add('active');
+  buildDots(i);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(i === FINALE) showFinal();
+}
+function buildDots(active){
+  document.querySelectorAll('.dots').forEach(d=>{
+    d.innerHTML = '';
+    for (let k=0; k<SLIDES; k++){
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (k===active?' on':'') + (k<active?' done':'');
+      d.appendChild(dot);
+    }
+  });
+}
+
+/* ============ Sound (Web Audio) ============ */
+let audioCtx;
+function getCtx(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playRight(){
+  const c = getCtx();
+  [523, 659, 784, 1047].forEach((f,i)=>{
+    const o = c.createOscillator(), g = c.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,c.currentTime+i*0.08);
+    g.gain.linearRampToValueAtTime(0.18,c.currentTime+i*0.08+0.02);
+    g.gain.linearRampToValueAtTime(0,c.currentTime+i*0.08+0.18);
+    o.connect(g); g.connect(c.destination);
+    o.start(c.currentTime+i*0.08); o.stop(c.currentTime+i*0.08+0.2);
+  });
+}
+function playWrong(){
+  const c = getCtx();
+  const o = c.createOscillator(), g = c.createGain();
+  o.type='sawtooth'; o.frequency.setValueAtTime(220, c.currentTime);
+  o.frequency.linearRampToValueAtTime(80, c.currentTime+0.4);
+  g.gain.setValueAtTime(0.16, c.currentTime);
+  g.gain.linearRampToValueAtTime(0, c.currentTime+0.4);
+  o.connect(g); g.connect(c.destination);
+  o.start(); o.stop(c.currentTime+0.4);
+}
+
+/* ============ Confetti ============ */
+function confetti(){
+  const root = document.getElementById('confetti');
+  root.style.display = 'block';
+  const colors = ['#E0AC3C','#FF9447','#86D464','#7CC6FF','#FFB7D5','#E85D2C','#0E9F9A','#6F3F8F'];
+  for (let i=0; i<70; i++){
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = -10 + 'px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.4) + 's';
+    p.style.animationDuration = (1.2 + Math.random()*1.2) + 's';
+    p.style.borderRadius = (Math.random()>0.5 ? '50%' : '2px');
+    root.appendChild(p);
+  }
+  setTimeout(()=>{ root.innerHTML=''; root.style.display='none'; }, 2400);
+}
+function flashX(){
+  const x = document.getElementById('xover');
+  x.classList.add('show');
+  setTimeout(()=>x.classList.remove('show'), 600);
+}
+
+/* ============ MC Quiz registry (single delegate) ============ */
+document.addEventListener('click', e=>{
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const box = opt.closest('.qbox');
+  if (!box) return;
+  const qid = box.dataset.q;
+  if (state.answered[qid]) return;
+  const correct = opt.dataset.c === '1';
+  const fb = box.querySelector('.feedback');
+  box.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if (correct){
+    opt.classList.add('right');
+    box.classList.add('ok');
+    fb.textContent = '🎉 Correct! Great thinking!';
+    fb.className = 'feedback show ok';
+    addXP(10); addCoins(2);
+    playRight(); confetti();
+  } else {
+    opt.classList.add('wrong');
+    box.classList.add('bad');
+    box.querySelectorAll('.opt').forEach(b=>{
+      if (b.dataset.c === '1') b.classList.add('right');
+    });
+    fb.textContent = '❌ Not quite — see the green answer above. Keep going, you have got this!';
+    fb.className = 'feedback show bad';
+    playWrong(); flashX();
+  }
+  state.answered[qid] = true;
+});
+
+/* ============ Fill-in ============ */
+function checkFill(inputId, correct, fbId){
+  const inp = document.getElementById(inputId);
+  const fb = document.getElementById(fbId);
+  if (state.answered['fill-'+inputId]) return;
+  const val = inp.value.trim().toLowerCase();
+  if (val === String(correct).toLowerCase()){
+    inp.classList.add('ok'); inp.disabled = true;
+    fb.textContent = '✅ Yes! ' + correct;
+    fb.style.color = 'var(--ok)';
+    addXP(8); addCoins(2);
+    playRight(); confetti();
+    state.answered['fill-'+inputId] = true;
+  } else {
+    inp.classList.add('bad');
+    fb.textContent = '❌ Try again!';
+    fb.style.color = 'var(--bad)';
+    playWrong(); flashX();
+    setTimeout(()=>{ inp.classList.remove('bad'); fb.textContent=''; }, 1500);
+  }
+}
+
+/* ============ Final ============ */
+function showFinal(){
+  document.getElementById('finalXP').textContent = state.xp;
+  document.getElementById('finalCoins').textContent = state.coins;
+  let title = 'Word Tracker! 🏆';
+  if (state.xp >= 200) title = 'Wildlife Words MASTER! 🌟';
+  else if (state.xp >= 120) title = 'Story Scout! ✨';
+  else if (state.xp >= 60) title = 'Rising Reader! ⭐';
+  document.getElementById('finalLvl').textContent = title;
+  setTimeout(confetti, 300);
+  setTimeout(confetti, 1200);
+}
+
+updateHud();
+buildDots(0);
+</script>
+</body>
+</html>

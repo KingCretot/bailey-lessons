@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦁 Bailey's Math Safari — Unit 8 | KingCretot Experience</title>
+<style>
+  :root{
+    --navy:#1B2C5C; --gold:#E0AC3C; --jungle:#1F8A4F; --sunset:#E85D2C;
+    --teal:#0E9F9A; --plum:#6F3F8F; --sand:#FBF4E0; --ink:#1f2937;
+    --ok:#2e9d4a; --bad:#dc2626; --shadow:0 4px 14px rgba(27,44,92,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Fredoka+One&display=swap');
+  html,body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FBF4E0 0%,#F0E1B5 50%,#D5EAEA 100%);color:var(--ink);min-height:100vh;font-size:17px;line-height:1.55}
+
+  .hud{position:fixed;top:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),#0f1a3a);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:var(--shadow);flex-wrap:wrap;gap:8px}
+  .hud-left{display:flex;align-items:center;gap:12px;font-family:'Fredoka One',cursive;font-size:1.15rem}
+  .hud-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .stat{background:rgba(255,255,255,.13);padding:6px 14px;border-radius:20px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:6px}
+  .xpbar{width:130px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}
+  .xpfill{height:100%;background:linear-gradient(90deg,var(--gold),#FFD86F);transition:width .4s;width:0%}
+
+  .wrap{max-width:880px;margin:80px auto 30px;padding:14px}
+  .slide{background:#fff;border-radius:20px;padding:26px;box-shadow:var(--shadow);min-height:520px;display:none;animation:pop .35s ease}
+  .slide.active{display:block}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+  h1{font-family:'Bangers',cursive;font-size:2.4rem;color:var(--navy);letter-spacing:1.5px;margin-bottom:6px}
+  h2{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--navy);margin-bottom:12px}
+  h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sunset);margin:14px 0 8px}
+  p{margin-bottom:10px;font-size:1rem}
+
+  .badge{display:inline-block;padding:5px 14px;border-radius:14px;font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),#F2C465);color:var(--navy);margin-bottom:8px}
+
+  .btn{padding:13px 26px;border-radius:14px;font-weight:900;border:none;cursor:pointer;font-family:inherit;font-size:1rem;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+  .btn-go{background:linear-gradient(135deg,var(--jungle),#0E6433);color:#fff;box-shadow:0 4px 0 #0a4a26}
+  .btn-go:hover{transform:translateY(-2px)}
+  .btn-back{background:#e5e7eb;color:#374151}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:10px;flex-wrap:wrap}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dot{width:11px;height:11px;border-radius:50%;background:#cbd5e1;transition:all .2s}
+  .dot.on{background:var(--gold);transform:scale(1.4)}
+  .dot.done{background:var(--jungle)}
+
+  .mascot-row{display:flex;justify-content:center;gap:14px;font-size:3rem;margin:10px 0 18px;flex-wrap:wrap}
+  .mascot{display:inline-block;animation:bob 2.6s ease-in-out infinite}
+  .mascot:nth-child(2){animation-delay:.3s}
+  .mascot:nth-child(3){animation-delay:.6s}
+  .mascot:nth-child(4){animation-delay:.9s}
+  .mascot:nth-child(5){animation-delay:1.2s}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+
+  .card{background:#FBF4E0;border:3px solid #F0E1B5;border-radius:18px;padding:16px;margin:12px 0}
+  .card-teal{background:#E5F4F4;border-color:#A8DEDC}
+  .card-jungle{background:#E8F5EC;border-color:#B5DDC5}
+  .card-sunset{background:#FFF0E8;border-color:#FFD0BB}
+  .card-plum{background:#F2EAF5;border-color:#D5BFE0}
+
+  .qbox{background:#fff;border:3px solid #E2E8F0;border-radius:16px;padding:18px;margin:14px 0;transition:border-color .25s}
+  .qbox.ok{border-color:var(--ok);background:#F0FBF3}
+  .qbox.bad{border-color:var(--bad);background:#FEF2F2}
+  .qprompt{font-weight:800;font-size:1.05rem;margin-bottom:12px;color:var(--navy)}
+  .opts{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+  .opt{background:#fff;border:3px solid #cbd5e1;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;text-align:left;font-family:inherit;font-size:.98rem;transition:all .15s}
+  .opt:hover{border-color:var(--gold);background:#FBF4E0;transform:translateY(-2px)}
+  .opt.right{background:#D9F7E1;border-color:var(--ok);color:#065f46}
+  .opt.wrong{background:#FFE2E2;border-color:var(--bad);color:#991b1b}
+  .opt:disabled{cursor:not-allowed}
+  .feedback{margin-top:10px;padding:12px;border-radius:10px;font-weight:700;font-size:.95rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#D9F7E1;color:#065f46}
+  .feedback.bad{background:#FFE2E2;color:#991b1b}
+
+  .fillrow{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;background:#FBF4E0;padding:10px 14px;border-radius:12px;border:2px dashed var(--sunset)}
+  .fillrow input{font-family:inherit;font-size:1.05rem;font-weight:800;padding:8px 12px;border:2px solid #cbd5e1;border-radius:9px;width:100px;text-align:center;background:#fff}
+  .fillrow input.ok{border-color:var(--ok);background:#D9F7E1}
+  .fillrow input.bad{border-color:var(--bad);background:#FFE2E2}
+  .checkbtn{padding:9px 18px;border-radius:10px;border:none;background:var(--sunset);color:#fff;font-weight:900;cursor:pointer;font-family:inherit}
+
+  .work{font-family:'Fredoka One',cursive;font-size:1.4rem;text-align:center;background:#FFFEF5;border:3px solid #F0E1B5;border-radius:14px;padding:16px;margin:10px 0;color:var(--navy);line-height:1.7}
+  .work .step{display:block;font-size:1rem;color:var(--sunset);font-weight:700;font-family:'Nunito',sans-serif;margin-top:6px}
+
+  .review-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}
+  @media(min-width:600px){.review-grid{grid-template-columns:1fr 1fr}}
+  .review-card{background:linear-gradient(135deg,#FBF4E0,#fffaf0);border:3px solid #F0E1B5;border-radius:14px;padding:14px;font-weight:700;font-size:.98rem}
+  .review-card strong{color:var(--sunset);display:block;margin-bottom:4px}
+
+  .conv-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;border-radius:12px;overflow:hidden;border:2px solid var(--gold)}
+  .conv-table th,.conv-table td{padding:10px 12px;text-align:left;font-weight:700;font-size:.95rem}
+  .conv-table th{background:var(--navy);color:#fff;font-family:'Fredoka One',cursive}
+  .conv-table tr:nth-child(even){background:#FBF4E0}
+  .conv-table tr:nth-child(odd){background:#fff}
+
+  /* ===== Effects ===== */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:200;display:none}
+  .conf-piece{position:absolute;width:10px;height:10px;animation:fall 1.6s linear forwards}
+  @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+  #xover{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:150;pointer-events:none}
+  #xover.show{display:flex;animation:xpop .55s ease-out}
+  #xover .x{font-size:9rem;color:var(--bad);font-weight:900;text-shadow:0 0 24px rgba(220,38,38,.5)}
+  @keyframes xpop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:0}}
+
+  .quote{font-style:italic;text-align:center;font-size:1.1rem;color:var(--navy);background:linear-gradient(135deg,#FBF4E0,#F0E1B5);padding:18px;border-radius:16px;border-left:6px solid var(--gold);margin:20px 0}
+  .footer-tag{text-align:center;color:#64748b;font-size:.82rem;margin-top:14px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ===== HUD ===== -->
+<div class="hud">
+  <div class="hud-left">🦁 Bailey's Math Safari — Unit 8</div>
+  <div class="hud-right">
+    <div class="stat"><span class="ico">⭐</span><span id="xpVal">0</span> XP</div>
+    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+    <div class="stat"><span class="ico">🪙</span><span id="coinVal">0</span></div>
+    <div class="stat"><span class="ico">🏆</span> Lvl <span id="lvlVal">1</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+<!-- ===== Slide 0: Welcome ===== -->
+<div class="slide active" id="s0">
+  <span class="badge">🦁 Unit 8 · Math Safari!</span>
+  <h1>🦁 Welcome Back, Bailey!</h1>
+  <div class="mascot-row">🦁 🦒 🐘 🦓 🦛</div>
+  <div class="card card-teal">
+    <p style="font-size:1.1rem"><strong>The safari continues!</strong> This week we explore decimals, connect them to fractions, and measure the wild with area, perimeter, and angles. You're becoming a true math explorer!</p>
+  </div>
+  <h3>🎯 What you'll learn today:</h3>
+  <div class="review-grid">
+    <div class="review-card"><strong>🔢 Decimals</strong>Tenths and hundredths place value</div>
+    <div class="review-card"><strong>🔄 Fraction–Decimal Link</strong>Two ways to show the same part</div>
+    <div class="review-card"><strong>📐 Area & Perimeter</strong>Measuring shapes</div>
+    <div class="review-card"><strong>📐 Angles & Lines</strong>Geometry of the wild</div>
+  </div>
+  <div class="card card-sunset">
+    <p>🎮 <strong>How to win XP:</strong> Get answers right to earn ⭐ XP and 🪙 coins. Tap an answer to lock it in!</p>
+  </div>
+  <div class="nav">
+    <span></span>
+    <button class="btn btn-go" onclick="go(1)">Let's Begin! 🚀</button>
+  </div>
+</div>
+<!-- ===== Slide 1: Review ===== -->
+<div class="slide" id="s1">
+  <span class="badge">🔁 Quick Review</span>
+  <h2>Warm-Up: From Unit 7</h2>
+  <p>Let's stretch our math muscles before the safari begins! 🧠✨</p>
+
+  <div class="qbox" data-q="r1">
+    <div class="qprompt">➗ 91 ÷ 7 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">12</button>
+      <button class="opt" data-i="1" data-c="1">13</button>
+      <button class="opt" data-i="2" data-c="0">14</button>
+      <button class="opt" data-i="3" data-c="0">11</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r2">
+    <div class="qprompt">🔍 Which number is PRIME?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">19</button>
+      <button class="opt" data-i="1" data-c="0">20</button>
+      <button class="opt" data-i="2" data-c="0">25</button>
+      <button class="opt" data-i="3" data-c="0">27</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r3">
+    <div class="qprompt">⚖️ Which fraction is EQUIVALENT to 1/3?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">2/3</button>
+      <button class="opt" data-i="1" data-c="1">3/9</button>
+      <button class="opt" data-i="2" data-c="0">1/6</button>
+      <button class="opt" data-i="3" data-c="0">3/4</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r4">
+    <div class="qprompt">✂️ What is 10/15 in simplest form?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">10/15</button>
+      <button class="opt" data-i="1" data-c="0">5/7</button>
+      <button class="opt" data-i="2" data-c="1">2/3</button>
+      <button class="opt" data-i="3" data-c="0">1/2</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(0)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn-go" onclick="go(2)">Next: Decimals! 🔢</button>
+  </div>
+</div>
+<!-- ===== Slide 2: Decimals to Hundredths ===== -->
+<div class="slide" id="s2">
+  <span class="badge">🔢 Decimals</span>
+  <h2>Decimals to Hundredths</h2>
+  <p>A <strong>decimal</strong> shows part of a whole using place value. The first place after the dot is <strong>tenths</strong>; the second is <strong>hundredths</strong>. 🧮</p>
+  <div class="card card-jungle">
+    <h3>🧮 Reading 3.47</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>3</strong>ones — left of the dot</div>
+      <div class="review-card"><strong>.4</strong>4 tenths</div>
+      <div class="review-card"><strong>.07</strong>7 hundredths</div>
+      <div class="review-card"><strong>Compare</strong>line up the dots, compare left to right</div>
+    </div>
+    <p style="margin-top:8px"><strong>Tip:</strong> 0.5 and 0.50 are equal — extra zeros on the right don't change the value.</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🦓 Try it!</h3>
+    <p>Which is greater, <strong>0.6 or 0.59</strong>? Type the greater decimal.</p>
+    <div class="fillrow">
+      <span>The greater decimal is </span>
+      <input type="text" id="dc1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('dc1','0.6','dc1fb')">Check</button>
+      <span id="dc1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="de1">
+    <div class="qprompt">🔢 What digit is in the HUNDREDTHS place of 5.83?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">3</button>
+      <button class="opt" data-i="1" data-c="0">8</button>
+      <button class="opt" data-i="2" data-c="0">5</button>
+      <button class="opt" data-i="3" data-c="0">0</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="de2">
+    <div class="qprompt">⚖️ Which sign is true: 0.7 ___ 0.68?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0"><</button>
+      <button class="opt" data-i="1" data-c="0">=</button>
+      <button class="opt" data-i="2" data-c="1">></button>
+      <button class="opt" data-i="3" data-c="0">+</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="de3">
+    <div class="qprompt">🧮 Which decimal equals 0.40?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">0.4</button>
+      <button class="opt" data-i="1" data-c="0">0.04</button>
+      <button class="opt" data-i="2" data-c="0">4.0</button>
+      <button class="opt" data-i="3" data-c="0">0.404</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(1)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(3)">Next: Fraction–Decimal Link! 🔄</button>
+  </div>
+</div>
+<!-- ===== Slide 3: The Fraction–Decimal Connection ===== -->
+<div class="slide" id="s3">
+  <span class="badge">🔄 Fraction–Decimal</span>
+  <h2>The Fraction–Decimal Connection</h2>
+  <p>Fractions with denominators of 10 or 100 turn straight into decimals. <strong>7/10 = 0.7</strong> and <strong>23/100 = 0.23.</strong> Same amount, two outfits! 🎭</p>
+  <div class="card card-sunset">
+    <h3>🔄 Matching Pairs</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>1/10 = 0.1</strong>one tenth</div>
+      <div class="review-card"><strong>1/2 = 5/10 = 0.5</strong>one half</div>
+      <div class="review-card"><strong>3/4 = 75/100 = 0.75</strong>three fourths</div>
+      <div class="review-card"><strong>9/100 = 0.09</strong>nine hundredths</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🦛 Try it!</h3>
+    <p>Write the fraction <strong>6/10</strong> as a decimal.</p>
+    <div class="fillrow">
+      <span>6/10 as a decimal = </span>
+      <input type="text" id="fd1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('fd1','0.6','fd1fb')">Check</button>
+      <span id="fd1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="fd1">
+    <div class="qprompt">🔄 What is 1/4 written as a decimal?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">0.4</button>
+      <button class="opt" data-i="1" data-c="0">1.4</button>
+      <button class="opt" data-i="2" data-c="0">0.14</button>
+      <button class="opt" data-i="3" data-c="1">0.25</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="fd2">
+    <div class="qprompt">🧮 What is 0.3 written as a fraction?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">3/10</button>
+      <button class="opt" data-i="1" data-c="0">3/100</button>
+      <button class="opt" data-i="2" data-c="0">1/3</button>
+      <button class="opt" data-i="3" data-c="0">30/10</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="fd3">
+    <div class="qprompt">⚖️ Which pair is EQUAL?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/4 and 0.4</button>
+      <button class="opt" data-i="1" data-c="0">3/10 and 0.03</button>
+      <button class="opt" data-i="2" data-c="0">1/5 and 0.5</button>
+      <button class="opt" data-i="3" data-c="1">1/2 and 0.5</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(2)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(4)">Next: Area & Perimeter! 📐</button>
+  </div>
+</div>
+<!-- ===== Slide 4: Measuring Shapes ===== -->
+<div class="slide" id="s4">
+  <span class="badge">📐 Area & Perimeter</span>
+  <h2>Measuring Shapes</h2>
+  <p><strong>Perimeter</strong> is the distance AROUND a shape — add all sides. <strong>Area</strong> is the space INSIDE — for a rectangle, multiply length × width. 📐</p>
+  <div class="card card-plum">
+    <h3>🟩 A Safari Enclosure: 8 m by 5 m</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Perimeter</strong>8 + 5 + 8 + 5 = 26 m of fence</div>
+      <div class="review-card"><strong>Area</strong>8 × 5 = 40 square meters of ground</div>
+      <div class="review-card"><strong>Perimeter units</strong>m, ft, cm — a length</div>
+      <div class="review-card"><strong>Area units</strong>square m, square ft — a space</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🐘 Try it!</h3>
+    <p>A rectangular pen is 9 m long and 6 m wide. What is its AREA?</p>
+    <div class="fillrow">
+      <span>9 × 6 = </span>
+      <input type="text" id="ap1" maxlength="6"><span>sq m</span>
+      <button class="checkbtn" onclick="checkFill('ap1','54','ap1fb')">Check</button>
+      <span id="ap1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="ap1">
+    <div class="qprompt">📐 A rectangle is 7 m by 3 m. What is its PERIMETER?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">21 m</button>
+      <button class="opt" data-i="1" data-c="0">10 m</button>
+      <button class="opt" data-i="2" data-c="1">20 m</button>
+      <button class="opt" data-i="3" data-c="0">24 m</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="ap2">
+    <div class="qprompt">🟩 A square has sides of 6 ft. What is its AREA?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">36 sq ft</button>
+      <button class="opt" data-i="1" data-c="0">24 sq ft</button>
+      <button class="opt" data-i="2" data-c="0">12 sq ft</button>
+      <button class="opt" data-i="3" data-c="0">30 sq ft</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="ap3">
+    <div class="qprompt">🧭 Which measurement is the distance AROUND a shape?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">area</button>
+      <button class="opt" data-i="1" data-c="0">volume</button>
+      <button class="opt" data-i="2" data-c="1">perimeter</button>
+      <button class="opt" data-i="3" data-c="0">angle</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(3)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(5)">Next: Angles & Lines! 📐</button>
+  </div>
+</div>
+<!-- ===== Slide 5: Angles & Lines ===== -->
+<div class="slide" id="s5">
+  <span class="badge">📐 Geometry</span>
+  <h2>Angles & Lines</h2>
+  <p>Geometry describes the shapes of the wild. Angles can be <strong>right, acute, or obtuse</strong>, and lines can be <strong>parallel</strong> or <strong>perpendicular</strong>. 📐</p>
+  <div class="card card-jungle">
+    <h3>📐 Know Your Angles</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Right angle</strong>exactly 90° — a perfect corner</div>
+      <div class="review-card"><strong>Acute angle</strong>smaller than 90° — sharp</div>
+      <div class="review-card"><strong>Obtuse angle</strong>bigger than 90° — wide open</div>
+      <div class="review-card"><strong>Straight angle</strong>exactly 180° — a flat line</div>
+    </div>
+  </div>
+  <div class="card card-sunset">
+    <h3>🛤️ Lines</h3>
+    <p><strong>Parallel lines</strong> never cross — like two safari trails side by side.<br>
+    <strong>Perpendicular lines</strong> cross to make a right angle — like a plus sign.</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🦓 Try it!</h3>
+    <p>An angle measures exactly 90 degrees. What type of angle is it? (type one word)</p>
+    <div class="fillrow">
+      <span>A 90-degree angle is a </span>
+      <input type="text" id="an1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('an1','right','an1fb')">Check</button>
+      <span id="an1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="an1">
+    <div class="qprompt">📐 An angle smaller than 90° is called —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">obtuse</button>
+      <button class="opt" data-i="1" data-c="1">acute</button>
+      <button class="opt" data-i="2" data-c="0">right</button>
+      <button class="opt" data-i="3" data-c="0">straight</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="an2">
+    <div class="qprompt">➕ Two lines that cross to form a right angle are —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">parallel</button>
+      <button class="opt" data-i="1" data-c="0">curved</button>
+      <button class="opt" data-i="2" data-c="0">equal</button>
+      <button class="opt" data-i="3" data-c="1">perpendicular</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="an3">
+    <div class="qprompt">🧭 An angle measuring 130° is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">acute</button>
+      <button class="opt" data-i="1" data-c="0">right</button>
+      <button class="opt" data-i="2" data-c="0">straight</button>
+      <button class="opt" data-i="3" data-c="1">obtuse</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(4)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(6)">Next: Word Problems! 🧠</button>
+  </div>
+</div>
+<!-- ===== Slide 6: Multi-Step Safari Problems ===== -->
+<div class="slide" id="s6">
+  <span class="badge">🧠 Word Problems</span>
+  <h2>Multi-Step Safari Problems</h2>
+  <p>Put it all together: read carefully, plan your steps, and check that the answer makes sense for the question. 🗺️</p>
+  <div class="card card-plum">
+    <h3>🐘 Worked Example</h3>
+    <p>A rectangular watering hole is 12 m by 8 m. A ranger walks all the way around it 3 times. How far does she walk?</p>
+    <p><strong>Step 1:</strong> Perimeter = 12 + 8 + 12 + 8 = 40 m.</p>
+    <p><strong>Step 2:</strong> 40 × 3 = <span style="color:var(--ok);font-weight:800">120 m</span>.</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🦛 Try it!</h3>
+    <p>A jeep travels 0.6 km, then 0.75 km, then 0.4 km. How far in all? (type a decimal)</p>
+    <div class="fillrow">
+      <span>0.6 + 0.75 + 0.4 = </span>
+      <input type="text" id="wp2" maxlength="6"><span>km</span>
+      <button class="checkbtn" onclick="checkFill('wp2','1.75','wp2fb')">Check</button>
+      <span id="wp2fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="wq1">
+    <div class="qprompt">📐 A garden is 10 m by 4 m. What is its AREA?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">28 sq m</button>
+      <button class="opt" data-i="1" data-c="1">40 sq m</button>
+      <button class="opt" data-i="2" data-c="0">14 sq m</button>
+      <button class="opt" data-i="3" data-c="0">44 sq m</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="wq2">
+    <div class="qprompt">💲 A ranger has 9.50 dollars and spends 3.75 dollars. How much is left?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">6.25</button>
+      <button class="opt" data-i="1" data-c="1">5.75</button>
+      <button class="opt" data-i="2" data-c="0">5.25</button>
+      <button class="opt" data-i="3" data-c="0">6.75</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="wq3">
+    <div class="qprompt">🦁 A square pen has a perimeter of 32 m. How long is ONE side?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">16 m</button>
+      <button class="opt" data-i="1" data-c="0">4 m</button>
+      <button class="opt" data-i="2" data-c="1">8 m</button>
+      <button class="opt" data-i="3" data-c="0">64 m</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(5)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(7)">Final Quiz! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 7: Final Quiz ===== -->
+<div class="slide" id="s7">
+  <span class="badge">🏆 Final Challenge</span>
+  <h2>Bring It All Together!</h2>
+  <p>A mix of every skill from today — go for it, safari explorer! 🦁💪</p>
+
+  <div class="qbox" data-q="f1">
+    <div class="qprompt">🔢 What digit is in the TENTHS place of 6.29?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">9</button>
+      <button class="opt" data-i="1" data-c="0">6</button>
+      <button class="opt" data-i="2" data-c="0">0</button>
+      <button class="opt" data-i="3" data-c="1">2</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f2">
+    <div class="qprompt">🔄 What is 3/4 written as a decimal?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">0.34</button>
+      <button class="opt" data-i="1" data-c="0">0.7</button>
+      <button class="opt" data-i="2" data-c="1">0.75</button>
+      <button class="opt" data-i="3" data-c="0">3.4</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f3">
+    <div class="qprompt">📐 A rectangle is 9 m by 4 m. What is its PERIMETER?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">36 m</button>
+      <button class="opt" data-i="1" data-c="1">26 m</button>
+      <button class="opt" data-i="2" data-c="0">13 m</button>
+      <button class="opt" data-i="3" data-c="0">22 m</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f4">
+    <div class="qprompt">🟩 A square has sides of 7 m. What is its AREA?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">49 sq m</button>
+      <button class="opt" data-i="1" data-c="0">28 sq m</button>
+      <button class="opt" data-i="2" data-c="0">14 sq m</button>
+      <button class="opt" data-i="3" data-c="0">21 sq m</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f5">
+    <div class="qprompt">📐 An angle bigger than 90° but less than 180° is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">acute</button>
+      <button class="opt" data-i="1" data-c="0">right</button>
+      <button class="opt" data-i="2" data-c="1">obtuse</button>
+      <button class="opt" data-i="3" data-c="0">straight</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f6">
+    <div class="qprompt">⚖️ Which sign is true: 0.45 ___ 0.5?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1"><</button>
+      <button class="opt" data-i="1" data-c="0">></button>
+      <button class="opt" data-i="2" data-c="0">=</button>
+      <button class="opt" data-i="3" data-c="0">x</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f7">
+    <div class="qprompt">🛤️ Lines that never cross are —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">perpendicular</button>
+      <button class="opt" data-i="1" data-c="0">curved</button>
+      <button class="opt" data-i="2" data-c="0">right</button>
+      <button class="opt" data-i="3" data-c="1">parallel</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f8">
+    <div class="qprompt">🧮 What is 0.7 written as a fraction?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">7/100</button>
+      <button class="opt" data-i="1" data-c="1">7/10</button>
+      <button class="opt" data-i="2" data-c="0">1/7</button>
+      <button class="opt" data-i="3" data-c="0">70/10</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(6)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(8)">Finish! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 8: Finale ===== -->
+<div class="slide" id="s8">
+  <span class="badge">🌟 You Did It!</span>
+  <h1 style="text-align:center">🎉 Brilliant Safari, Bailey! 🎉</h1>
+  <div class="mascot-row">🦁 🦒 🐘 🦓 🦛</div>
+  <div class="card card-teal" style="text-align:center">
+    <h2>Your Safari Score</h2>
+    <p style="font-size:2.4rem;font-family:'Bangers',cursive;color:var(--navy)">⭐ <span id="finalXP">0</span> XP · 🪙 <span id="finalCoins">0</span> coins</p>
+    <p style="font-size:1.2rem;font-weight:800;color:var(--sunset)" id="finalLvl">Champion!</p>
+  </div>
+  <div class="quote">
+    "The wild is full of shapes, numbers, and patterns waiting to be measured. You now have the tools to explore them all, Bailey — keep tracking."<br><strong>— Coach Jonathan, KingCretot Experience</strong>
+  </div>
+  <div class="card card-sunset" style="text-align:center">
+    <h3>📝 Your Mission Tonight:</h3>
+    <p>Complete your <strong>Unit 8 Post-Lesson Activity Packet</strong> to lock in every skill!</p>
+  </div>
+  <div class="footer-tag">🦁 KingCretot Experience · Bailey's Math Safari · Unit 8 🦁</div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ===== Effects ===== -->
+<div id="confetti"></div>
+<div id="xover"><div class="x">✕</div></div>
+<script>
+/* ============ State ============ */
+const state = { xp:0, coins:0, lvl:1, answered:{} };
+const SLIDES = 9;
+const FINALE = 8;
+
+function updateHud(){
+  document.getElementById('xpVal').textContent = state.xp;
+  document.getElementById('coinVal').textContent = state.coins;
+  document.getElementById('lvlVal').textContent = state.lvl;
+  const pct = Math.min(100, (state.xp % 100));
+  document.getElementById('xpFill').style.width = pct + '%';
+  if (state.xp >= state.lvl * 100) state.lvl++;
+}
+function addXP(n){ state.xp += n; updateHud(); }
+function addCoins(n){ state.coins += n; updateHud(); }
+
+/* ============ Navigation ============ */
+function go(i){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+i).classList.add('active');
+  buildDots(i);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(i === FINALE) showFinal();
+}
+function buildDots(active){
+  document.querySelectorAll('.dots').forEach(d=>{
+    d.innerHTML = '';
+    for (let k=0; k<SLIDES; k++){
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (k===active?' on':'') + (k<active?' done':'');
+      d.appendChild(dot);
+    }
+  });
+}
+
+/* ============ Sound (Web Audio) ============ */
+let audioCtx;
+function getCtx(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playRight(){
+  const c = getCtx();
+  [523, 659, 784, 1047].forEach((f,i)=>{
+    const o = c.createOscillator(), g = c.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,c.currentTime+i*0.08);
+    g.gain.linearRampToValueAtTime(0.18,c.currentTime+i*0.08+0.02);
+    g.gain.linearRampToValueAtTime(0,c.currentTime+i*0.08+0.18);
+    o.connect(g); g.connect(c.destination);
+    o.start(c.currentTime+i*0.08); o.stop(c.currentTime+i*0.08+0.2);
+  });
+}
+function playWrong(){
+  const c = getCtx();
+  const o = c.createOscillator(), g = c.createGain();
+  o.type='sawtooth'; o.frequency.setValueAtTime(220, c.currentTime);
+  o.frequency.linearRampToValueAtTime(80, c.currentTime+0.4);
+  g.gain.setValueAtTime(0.16, c.currentTime);
+  g.gain.linearRampToValueAtTime(0, c.currentTime+0.4);
+  o.connect(g); g.connect(c.destination);
+  o.start(); o.stop(c.currentTime+0.4);
+}
+
+/* ============ Confetti ============ */
+function confetti(){
+  const root = document.getElementById('confetti');
+  root.style.display = 'block';
+  const colors = ['#E0AC3C','#FF9447','#86D464','#7CC6FF','#FFB7D5','#E85D2C','#0E9F9A','#6F3F8F'];
+  for (let i=0; i<70; i++){
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = -10 + 'px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.4) + 's';
+    p.style.animationDuration = (1.2 + Math.random()*1.2) + 's';
+    p.style.borderRadius = (Math.random()>0.5 ? '50%' : '2px');
+    root.appendChild(p);
+  }
+  setTimeout(()=>{ root.innerHTML=''; root.style.display='none'; }, 2400);
+}
+function flashX(){
+  const x = document.getElementById('xover');
+  x.classList.add('show');
+  setTimeout(()=>x.classList.remove('show'), 600);
+}
+
+/* ============ MC Quiz registry (single delegate) ============ */
+document.addEventListener('click', e=>{
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const box = opt.closest('.qbox');
+  if (!box) return;
+  const qid = box.dataset.q;
+  if (state.answered[qid]) return;
+  const correct = opt.dataset.c === '1';
+  const fb = box.querySelector('.feedback');
+  box.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if (correct){
+    opt.classList.add('right');
+    box.classList.add('ok');
+    fb.textContent = '🎉 Correct! Great thinking!';
+    fb.className = 'feedback show ok';
+    addXP(10); addCoins(2);
+    playRight(); confetti();
+  } else {
+    opt.classList.add('wrong');
+    box.classList.add('bad');
+    box.querySelectorAll('.opt').forEach(b=>{
+      if (b.dataset.c === '1') b.classList.add('right');
+    });
+    fb.textContent = '❌ Not quite — see the green answer above. Keep going, you have got this!';
+    fb.className = 'feedback show bad';
+    playWrong(); flashX();
+  }
+  state.answered[qid] = true;
+});
+
+/* ============ Fill-in ============ */
+function checkFill(inputId, correct, fbId){
+  const inp = document.getElementById(inputId);
+  const fb = document.getElementById(fbId);
+  if (state.answered['fill-'+inputId]) return;
+  const val = inp.value.trim().toLowerCase();
+  if (val === String(correct).toLowerCase()){
+    inp.classList.add('ok'); inp.disabled = true;
+    fb.textContent = '✅ Yes! ' + correct;
+    fb.style.color = 'var(--ok)';
+    addXP(8); addCoins(2);
+    playRight(); confetti();
+    state.answered['fill-'+inputId] = true;
+  } else {
+    inp.classList.add('bad');
+    fb.textContent = '❌ Try again!';
+    fb.style.color = 'var(--bad)';
+    playWrong(); flashX();
+    setTimeout(()=>{ inp.classList.remove('bad'); fb.textContent=''; }, 1500);
+  }
+}
+
+/* ============ Final ============ */
+function showFinal(){
+  document.getElementById('finalXP').textContent = state.xp;
+  document.getElementById('finalCoins').textContent = state.coins;
+  let title = 'Safari Mathematician! 🏆';
+  if (state.xp >= 200) title = 'Safari MASTER! 🌟';
+  else if (state.xp >= 120) title = 'Math Tracker! ✨';
+  else if (state.xp >= 60) title = 'Rising Explorer! ⭐';
+  document.getElementById('finalLvl').textContent = title;
+  setTimeout(confetti, 300);
+  setTimeout(confetti, 1200);
+}
+
+updateHud();
+buildDots(0);
+</script>
+</body>
+</html>

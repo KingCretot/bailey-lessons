@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🦁 Bailey's Math Safari — Unit 7 | KingCretot Experience</title>
+<style>
+  :root{
+    --navy:#1B2C5C; --gold:#E0AC3C; --jungle:#1F8A4F; --sunset:#E85D2C;
+    --teal:#0E9F9A; --plum:#6F3F8F; --sand:#FBF4E0; --ink:#1f2937;
+    --ok:#2e9d4a; --bad:#dc2626; --shadow:0 4px 14px rgba(27,44,92,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Fredoka+One&display=swap');
+  html,body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FBF4E0 0%,#F0E1B5 50%,#D5EAEA 100%);color:var(--ink);min-height:100vh;font-size:17px;line-height:1.55}
+
+  .hud{position:fixed;top:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),#0f1a3a);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:var(--shadow);flex-wrap:wrap;gap:8px}
+  .hud-left{display:flex;align-items:center;gap:12px;font-family:'Fredoka One',cursive;font-size:1.15rem}
+  .hud-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .stat{background:rgba(255,255,255,.13);padding:6px 14px;border-radius:20px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:6px}
+  .xpbar{width:130px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}
+  .xpfill{height:100%;background:linear-gradient(90deg,var(--gold),#FFD86F);transition:width .4s;width:0%}
+
+  .wrap{max-width:880px;margin:80px auto 30px;padding:14px}
+  .slide{background:#fff;border-radius:20px;padding:26px;box-shadow:var(--shadow);min-height:520px;display:none;animation:pop .35s ease}
+  .slide.active{display:block}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+  h1{font-family:'Bangers',cursive;font-size:2.4rem;color:var(--navy);letter-spacing:1.5px;margin-bottom:6px}
+  h2{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--navy);margin-bottom:12px}
+  h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sunset);margin:14px 0 8px}
+  p{margin-bottom:10px;font-size:1rem}
+
+  .badge{display:inline-block;padding:5px 14px;border-radius:14px;font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),#F2C465);color:var(--navy);margin-bottom:8px}
+
+  .btn{padding:13px 26px;border-radius:14px;font-weight:900;border:none;cursor:pointer;font-family:inherit;font-size:1rem;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+  .btn-go{background:linear-gradient(135deg,var(--jungle),#0E6433);color:#fff;box-shadow:0 4px 0 #0a4a26}
+  .btn-go:hover{transform:translateY(-2px)}
+  .btn-back{background:#e5e7eb;color:#374151}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:10px;flex-wrap:wrap}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dot{width:11px;height:11px;border-radius:50%;background:#cbd5e1;transition:all .2s}
+  .dot.on{background:var(--gold);transform:scale(1.4)}
+  .dot.done{background:var(--jungle)}
+
+  .mascot-row{display:flex;justify-content:center;gap:14px;font-size:3rem;margin:10px 0 18px;flex-wrap:wrap}
+  .mascot{display:inline-block;animation:bob 2.6s ease-in-out infinite}
+  .mascot:nth-child(2){animation-delay:.3s}
+  .mascot:nth-child(3){animation-delay:.6s}
+  .mascot:nth-child(4){animation-delay:.9s}
+  .mascot:nth-child(5){animation-delay:1.2s}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+
+  .card{background:#FBF4E0;border:3px solid #F0E1B5;border-radius:18px;padding:16px;margin:12px 0}
+  .card-teal{background:#E5F4F4;border-color:#A8DEDC}
+  .card-jungle{background:#E8F5EC;border-color:#B5DDC5}
+  .card-sunset{background:#FFF0E8;border-color:#FFD0BB}
+  .card-plum{background:#F2EAF5;border-color:#D5BFE0}
+
+  .qbox{background:#fff;border:3px solid #E2E8F0;border-radius:16px;padding:18px;margin:14px 0;transition:border-color .25s}
+  .qbox.ok{border-color:var(--ok);background:#F0FBF3}
+  .qbox.bad{border-color:var(--bad);background:#FEF2F2}
+  .qprompt{font-weight:800;font-size:1.05rem;margin-bottom:12px;color:var(--navy)}
+  .opts{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+  .opt{background:#fff;border:3px solid #cbd5e1;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;text-align:left;font-family:inherit;font-size:.98rem;transition:all .15s}
+  .opt:hover{border-color:var(--gold);background:#FBF4E0;transform:translateY(-2px)}
+  .opt.right{background:#D9F7E1;border-color:var(--ok);color:#065f46}
+  .opt.wrong{background:#FFE2E2;border-color:var(--bad);color:#991b1b}
+  .opt:disabled{cursor:not-allowed}
+  .feedback{margin-top:10px;padding:12px;border-radius:10px;font-weight:700;font-size:.95rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#D9F7E1;color:#065f46}
+  .feedback.bad{background:#FFE2E2;color:#991b1b}
+
+  .fillrow{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;background:#FBF4E0;padding:10px 14px;border-radius:12px;border:2px dashed var(--sunset)}
+  .fillrow input{font-family:inherit;font-size:1.05rem;font-weight:800;padding:8px 12px;border:2px solid #cbd5e1;border-radius:9px;width:100px;text-align:center;background:#fff}
+  .fillrow input.ok{border-color:var(--ok);background:#D9F7E1}
+  .fillrow input.bad{border-color:var(--bad);background:#FFE2E2}
+  .checkbtn{padding:9px 18px;border-radius:10px;border:none;background:var(--sunset);color:#fff;font-weight:900;cursor:pointer;font-family:inherit}
+
+  .work{font-family:'Fredoka One',cursive;font-size:1.4rem;text-align:center;background:#FFFEF5;border:3px solid #F0E1B5;border-radius:14px;padding:16px;margin:10px 0;color:var(--navy);line-height:1.7}
+  .work .step{display:block;font-size:1rem;color:var(--sunset);font-weight:700;font-family:'Nunito',sans-serif;margin-top:6px}
+
+  .review-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}
+  @media(min-width:600px){.review-grid{grid-template-columns:1fr 1fr}}
+  .review-card{background:linear-gradient(135deg,#FBF4E0,#fffaf0);border:3px solid #F0E1B5;border-radius:14px;padding:14px;font-weight:700;font-size:.98rem}
+  .review-card strong{color:var(--sunset);display:block;margin-bottom:4px}
+
+  .conv-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;border-radius:12px;overflow:hidden;border:2px solid var(--gold)}
+  .conv-table th,.conv-table td{padding:10px 12px;text-align:left;font-weight:700;font-size:.95rem}
+  .conv-table th{background:var(--navy);color:#fff;font-family:'Fredoka One',cursive}
+  .conv-table tr:nth-child(even){background:#FBF4E0}
+  .conv-table tr:nth-child(odd){background:#fff}
+
+  /* ===== Effects ===== */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:200;display:none}
+  .conf-piece{position:absolute;width:10px;height:10px;animation:fall 1.6s linear forwards}
+  @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+  #xover{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:150;pointer-events:none}
+  #xover.show{display:flex;animation:xpop .55s ease-out}
+  #xover .x{font-size:9rem;color:var(--bad);font-weight:900;text-shadow:0 0 24px rgba(220,38,38,.5)}
+  @keyframes xpop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:0}}
+
+  .quote{font-style:italic;text-align:center;font-size:1.1rem;color:var(--navy);background:linear-gradient(135deg,#FBF4E0,#F0E1B5);padding:18px;border-radius:16px;border-left:6px solid var(--gold);margin:20px 0}
+  .footer-tag{text-align:center;color:#64748b;font-size:.82rem;margin-top:14px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ===== HUD ===== -->
+<div class="hud">
+  <div class="hud-left">🦁 Bailey's Math Safari — Unit 7</div>
+  <div class="hud-right">
+    <div class="stat"><span class="ico">⭐</span><span id="xpVal">0</span> XP</div>
+    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+    <div class="stat"><span class="ico">🪙</span><span id="coinVal">0</span></div>
+    <div class="stat"><span class="ico">🏆</span> Lvl <span id="lvlVal">1</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+<!-- ===== Slide 0: Welcome ===== -->
+<div class="slide active" id="s0">
+  <span class="badge">🦁 Unit 7 · Math Safari!</span>
+  <h1>🦁 Welcome Back, Bailey!</h1>
+  <div class="mascot-row">🦁 🦒 🐘 🦓 🦛</div>
+  <div class="card card-teal">
+    <p style="font-size:1.1rem"><strong>Safari math is calling!</strong> Last week you conquered multiplication and decimals. This week we tackle long division, factors, and fractions like a true math explorer. Let's go!</p>
+  </div>
+  <h3>🎯 What you'll learn today:</h3>
+  <div class="review-grid">
+    <div class="review-card"><strong>➗ Long Division</strong>Dividing with remainders</div>
+    <div class="review-card"><strong>🔍 Factors & Multiples</strong>Prime vs composite numbers</div>
+    <div class="review-card"><strong>⚖️ Equivalent Fractions</strong>Same value, different look</div>
+    <div class="review-card"><strong>🔢 Comparing Fractions</strong>Which fraction is greater</div>
+  </div>
+  <div class="card card-sunset">
+    <p>🎮 <strong>How to win XP:</strong> Get answers right to earn ⭐ XP and 🪙 coins. Tap an answer to lock it in!</p>
+  </div>
+  <div class="nav">
+    <span></span>
+    <button class="btn btn-go" onclick="go(1)">Let's Begin! 🚀</button>
+  </div>
+</div>
+<!-- ===== Slide 1: Review ===== -->
+<div class="slide" id="s1">
+  <span class="badge">🔁 Quick Review</span>
+  <h2>Warm-Up: From Unit 6</h2>
+  <p>Let's stretch our math muscles before the safari begins! 🧠✨</p>
+
+  <div class="qbox" data-q="r1">
+    <div class="qprompt">✖️ 23 × 14 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">312</button>
+      <button class="opt" data-i="1" data-c="0">332</button>
+      <button class="opt" data-i="2" data-c="0">282</button>
+      <button class="opt" data-i="3" data-c="1">322</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r2">
+    <div class="qprompt">➕ 1/2 + 1/4 = ? (LCD = 4)</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">2/6</button>
+      <button class="opt" data-i="1" data-c="0">1/6</button>
+      <button class="opt" data-i="2" data-c="1">3/4</button>
+      <button class="opt" data-i="3" data-c="0">2/4</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r3">
+    <div class="qprompt">💲 4.6 + 3.75 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">8.35</button>
+      <button class="opt" data-i="1" data-c="0">8.21</button>
+      <button class="opt" data-i="2" data-c="0">7.35</button>
+      <button class="opt" data-i="3" data-c="0">8.45</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r4">
+    <div class="qprompt">📏 Convert: 3 feet = ___ inches</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">30</button>
+      <button class="opt" data-i="1" data-c="0">12</button>
+      <button class="opt" data-i="2" data-c="1">36</button>
+      <button class="opt" data-i="3" data-c="0">33</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(0)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn-go" onclick="go(2)">Next: Long Division! ➗</button>
+  </div>
+</div>
+<!-- ===== Slide 2: Division with Remainders ===== -->
+<div class="slide" id="s2">
+  <span class="badge">➗ Long Division</span>
+  <h2>Division with Remainders</h2>
+  <p>Long division means sharing a number into equal groups. Sometimes there's a leftover — that's the <strong>remainder</strong>. Use the steps: <strong>Divide → Multiply → Subtract → Bring down.</strong> 🔄</p>
+  <div class="card card-jungle">
+    <h3>📚 Walk through 158 ÷ 6</h3>
+    <p><strong>Step 1 — Divide:</strong> 15 ÷ 6 = 2 (since 6×2 = 12). Write 2 above the 5.</p>
+    <p><strong>Step 2 — Multiply & Subtract:</strong> 15 − 12 = 3.</p>
+    <p><strong>Step 3 — Bring down</strong> the 8 to make 38.</p>
+    <p><strong>Step 4 — Divide again:</strong> 38 ÷ 6 = 6 (since 6×6 = 36). 38 − 36 = 2 left over.</p>
+    <p style="text-align:center;font-weight:800;color:var(--ok)">✨ 158 ÷ 6 = 26 R2</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🐘 Safari Problem</h3>
+    <p>A wildlife guide must seat <strong>92 visitors</strong> into safari jeeps that hold <strong>4 people</strong> each. How many full jeeps are needed?</p>
+    <div class="fillrow">
+      <span>92 ÷ 4 = </span>
+      <input type="text" id="div1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('div1','23','div1fb')">Check</button>
+      <span id="div1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="dv1">
+    <div class="qprompt">➗ 84 ÷ 7 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">12</button>
+      <button class="opt" data-i="1" data-c="0">11</button>
+      <button class="opt" data-i="2" data-c="0">14</button>
+      <button class="opt" data-i="3" data-c="0">13</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="dv2">
+    <div class="qprompt">🧮 65 ÷ 4 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">15 R5</button>
+      <button class="opt" data-i="1" data-c="0">16 R3</button>
+      <button class="opt" data-i="2" data-c="0">17 R1</button>
+      <button class="opt" data-i="3" data-c="1">16 R1</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="dv3">
+    <div class="qprompt">🦒 A ranger packs 138 leaves equally among 6 giraffes. How many leaves per giraffe?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">22</button>
+      <button class="opt" data-i="1" data-c="1">23</button>
+      <button class="opt" data-i="2" data-c="0">24</button>
+      <button class="opt" data-i="3" data-c="0">21</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(1)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(3)">Next: Factors! 🔍</button>
+  </div>
+</div>
+<!-- ===== Slide 3: Prime & Composite Numbers ===== -->
+<div class="slide" id="s3">
+  <span class="badge">🔍 Factors & Multiples</span>
+  <h2>Prime & Composite Numbers</h2>
+  <p>A <strong>factor</strong> divides a number evenly. A <strong>multiple</strong> is what you get when you skip-count. A <strong>prime</strong> number has exactly two factors; a <strong>composite</strong> has more. 🧩</p>
+  <div class="card card-plum">
+    <h3>🧮 Factors vs. Multiples</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Factors of 12</strong>1, 2, 3, 4, 6, 12 — they divide 12 evenly</div>
+      <div class="review-card"><strong>Multiples of 12</strong>12, 24, 36, 48 — skip-counting by 12</div>
+      <div class="review-card"><strong>Prime</strong>exactly 2 factors: 2, 3, 5, 7, 11, 13</div>
+      <div class="review-card"><strong>Composite</strong>more than 2 factors: 4, 6, 8, 9, 10</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🦁 Try it!</h3>
+    <p>List how many factors the number <strong>7</strong> has. (type the number of factors)</p>
+    <div class="fillrow">
+      <span>The number 7 has </span>
+      <input type="text" id="fac1" maxlength="6"><span>factors</span>
+      <button class="checkbtn" onclick="checkFill('fac1','2','fac1fb')">Check</button>
+      <span id="fac1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="fa1">
+    <div class="qprompt">🔍 Which number is PRIME?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">12</button>
+      <button class="opt" data-i="1" data-c="0">15</button>
+      <button class="opt" data-i="2" data-c="1">13</button>
+      <button class="opt" data-i="3" data-c="0">21</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="fa2">
+    <div class="qprompt">🧮 Which set lists FACTORS of 18?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">18, 36, 54</button>
+      <button class="opt" data-i="1" data-c="0">1, 4, 8, 18</button>
+      <button class="opt" data-i="2" data-c="0">2, 5, 9, 18</button>
+      <button class="opt" data-i="3" data-c="1">1, 2, 3, 6, 9, 18</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="fa3">
+    <div class="qprompt">⏭️ Which number is a MULTIPLE of 8?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">20</button>
+      <button class="opt" data-i="1" data-c="0">30</button>
+      <button class="opt" data-i="2" data-c="1">56</button>
+      <button class="opt" data-i="3" data-c="0">44</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(2)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(4)">Next: Equivalent Fractions! ⚖️</button>
+  </div>
+</div>
+<!-- ===== Slide 4: Same Value, Different Look ===== -->
+<div class="slide" id="s4">
+  <span class="badge">⚖️ Equivalent Fractions</span>
+  <h2>Same Value, Different Look</h2>
+  <p><strong>Equivalent fractions</strong> name the same amount. Multiply OR divide the top and bottom by the SAME number to find them. 🔄</p>
+  <div class="card card-sunset">
+    <h3>🔢 Building Equivalent Fractions</h3>
+    <p><strong>Multiply both parts:</strong> 1/2 = (1×3)/(2×3) = 3/6. Same amount of pizza!</p>
+    <p><strong>Simplify by dividing:</strong> 6/8 = (6÷2)/(8÷2) = 3/4. Always divide by the largest factor they share.</p>
+    <div class="review-grid">
+      <div class="review-card"><strong>1/2</strong>= 2/4 = 3/6 = 5/10</div>
+      <div class="review-card"><strong>1/3</strong>= 2/6 = 3/9 = 4/12</div>
+      <div class="review-card"><strong>2/3</strong>= 4/6 = 6/9 = 8/12</div>
+      <div class="review-card"><strong>Simplest form</strong>when 1 is the only shared factor</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🦛 Try it!</h3>
+    <p>Simplify <strong>4/8</strong> to its simplest form. (type like 1/2)</p>
+    <div class="fillrow">
+      <span>4/8 simplified = </span>
+      <input type="text" id="eq1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('eq1','1/2','eq1fb')">Check</button>
+      <span id="eq1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="eq1">
+    <div class="qprompt">⚖️ Which fraction is EQUIVALENT to 1/2?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">2/3</button>
+      <button class="opt" data-i="1" data-c="0">3/5</button>
+      <button class="opt" data-i="2" data-c="0">1/4</button>
+      <button class="opt" data-i="3" data-c="1">4/8</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="eq2">
+    <div class="qprompt">✂️ What is 9/12 in simplest form?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">9/12</button>
+      <button class="opt" data-i="1" data-c="1">3/4</button>
+      <button class="opt" data-i="2" data-c="0">4/3</button>
+      <button class="opt" data-i="3" data-c="0">1/2</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="eq3">
+    <div class="qprompt">🔄 Fill the blank: 2/5 = ?/10</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">5/10</button>
+      <button class="opt" data-i="1" data-c="0">2/10</button>
+      <button class="opt" data-i="2" data-c="0">7/10</button>
+      <button class="opt" data-i="3" data-c="1">4/10</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(3)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(5)">Next: Comparing Fractions! 🔢</button>
+  </div>
+</div>
+<!-- ===== Slide 5: Which Fraction Is Greater? ===== -->
+<div class="slide" id="s5">
+  <span class="badge">🔢 Comparing Fractions</span>
+  <h2>Which Fraction Is Greater?</h2>
+  <p>To compare fractions: if denominators match, compare the <strong>numerators</strong>. If not, find a <strong>common denominator</strong> first — or use the benchmark 1/2. 🧭</p>
+  <div class="card card-jungle">
+    <h3>🧭 Three Comparing Tricks</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Same bottom</strong>3/8 &lt; 5/8 — just compare tops</div>
+      <div class="review-card"><strong>Same top</strong>1/4 &lt; 1/3 — fewer pieces = bigger pieces</div>
+      <div class="review-card"><strong>Common denominator</strong>2/3 vs 3/4 → 8/12 vs 9/12 → 3/4 wins</div>
+      <div class="review-card"><strong>Benchmark</strong>compare each to 1/2</div>
+    </div>
+  </div>
+  <div class="card card-teal">
+    <h3>🦓 Try it!</h3>
+    <p>Which symbol makes it true: <strong>5/6 ___ 4/6</strong>? Type one of: &gt; &lt; =</p>
+    <div class="fillrow">
+      <span>5/6 ___ 4/6, the symbol is </span>
+      <input type="text" id="cf1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('cf1','>','cf1fb')">Check</button>
+      <span id="cf1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="cp1">
+    <div class="qprompt">🔢 Which sign is true: 3/8 ___ 7/8?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">></button>
+      <button class="opt" data-i="1" data-c="0">=</button>
+      <button class="opt" data-i="2" data-c="1"><</button>
+      <button class="opt" data-i="3" data-c="0">+</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="cp2">
+    <div class="qprompt">🍰 Which fraction is the GREATEST?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/4</button>
+      <button class="opt" data-i="1" data-c="1">3/4</button>
+      <button class="opt" data-i="2" data-c="0">2/4</button>
+      <button class="opt" data-i="3" data-c="0">1/8</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="cp3">
+    <div class="qprompt">🧭 With the SAME numerator, which is larger: 1/3 or 1/5?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/5</button>
+      <button class="opt" data-i="1" data-c="0">they are equal</button>
+      <button class="opt" data-i="2" data-c="1">1/3</button>
+      <button class="opt" data-i="3" data-c="0">cannot tell</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(4)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(6)">Next: Word Problems! 🧠</button>
+  </div>
+</div>
+<!-- ===== Slide 6: Multi-Step Safari Problems ===== -->
+<div class="slide" id="s6">
+  <span class="badge">🧠 Word Problems</span>
+  <h2>Multi-Step Safari Problems</h2>
+  <p>Multi-step problems need a <strong>plan</strong>. Read carefully, decide each step, solve in order, and check that your answer makes sense. 🗺️</p>
+  <div class="card card-plum">
+    <h3>🐘 Worked Example</h3>
+    <p>A safari park has 6 elephants. Each eats 45 kg of hay daily, plus the park adds 30 kg of fruit total. How much food per day?</p>
+    <p><strong>Step 1:</strong> Hay = 6 × 45 = 270 kg.</p>
+    <p><strong>Step 2:</strong> Add fruit = 270 + 30 = <span style="color:var(--ok);font-weight:800">300 kg per day</span>.</p>
+  </div>
+  <div class="card card-teal">
+    <h3>🦛 Try it!</h3>
+    <p>A guide drives 38 km in the morning and 47 km in the afternoon for 2 days. How many km total?</p>
+    <div class="fillrow">
+      <span>(38 + 47) × 2 = </span>
+      <input type="text" id="wp1" maxlength="6"><span>km</span>
+      <button class="checkbtn" onclick="checkFill('wp1','170','wp1fb')">Check</button>
+      <span id="wp1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="wq1">
+    <div class="qprompt">🦁 A ranger has $80. She buys 3 maps at $12 each. How much money is left?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">$36</button>
+      <button class="opt" data-i="1" data-c="1">$44</button>
+      <button class="opt" data-i="2" data-c="0">$56</button>
+      <button class="opt" data-i="3" data-c="0">$24</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="wq2">
+    <div class="qprompt">🦒 A truck carries 156 leaves shared equally among 4 crates, then 12 more leaves are added to ONE crate. How many in that crate?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">51</button>
+      <button class="opt" data-i="1" data-c="0">39</button>
+      <button class="opt" data-i="2" data-c="0">47</button>
+      <button class="opt" data-i="3" data-c="0">55</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="wq3">
+    <div class="qprompt">🐘 7 elephants drink 25 liters of water each. The pond started with 200 liters. How much water is LEFT?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">25 liters</button>
+      <button class="opt" data-i="1" data-c="0">175 liters</button>
+      <button class="opt" data-i="2" data-c="0">75 liters</button>
+      <button class="opt" data-i="3" data-c="0">50 liters</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(5)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(7)">Final Quiz! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 7: Final Quiz ===== -->
+<div class="slide" id="s7">
+  <span class="badge">🏆 Final Challenge</span>
+  <h2>Bring It All Together!</h2>
+  <p>A mix of every skill from today — go for it, safari explorer! 🦁💪</p>
+
+  <div class="qbox" data-q="f1">
+    <div class="qprompt">➗ 96 ÷ 8 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">11</button>
+      <button class="opt" data-i="1" data-c="1">12</button>
+      <button class="opt" data-i="2" data-c="0">13</button>
+      <button class="opt" data-i="3" data-c="0">14</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f2">
+    <div class="qprompt">🔍 Which number is PRIME?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">17</button>
+      <button class="opt" data-i="1" data-c="0">16</button>
+      <button class="opt" data-i="2" data-c="0">21</button>
+      <button class="opt" data-i="3" data-c="0">27</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f3">
+    <div class="qprompt">⚖️ Which fraction is EQUIVALENT to 3/4?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">4/5</button>
+      <button class="opt" data-i="1" data-c="0">2/3</button>
+      <button class="opt" data-i="2" data-c="0">3/8</button>
+      <button class="opt" data-i="3" data-c="1">6/8</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f4">
+    <div class="qprompt">🔢 Which sign is true: 2/3 ___ 5/6?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">></button>
+      <button class="opt" data-i="1" data-c="1"><</button>
+      <button class="opt" data-i="2" data-c="0">=</button>
+      <button class="opt" data-i="3" data-c="0">x</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f5">
+    <div class="qprompt">✂️ What is 8/12 in simplest form?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">8/12</button>
+      <button class="opt" data-i="1" data-c="1">2/3</button>
+      <button class="opt" data-i="2" data-c="0">4/6</button>
+      <button class="opt" data-i="3" data-c="0">3/4</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f6">
+    <div class="qprompt">🧮 73 ÷ 5 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">14 R3</button>
+      <button class="opt" data-i="1" data-c="0">14 R1</button>
+      <button class="opt" data-i="2" data-c="0">15 R2</button>
+      <button class="opt" data-i="3" data-c="0">13 R3</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f7">
+    <div class="qprompt">⏭️ Which number is a MULTIPLE of 9?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">50</button>
+      <button class="opt" data-i="1" data-c="0">40</button>
+      <button class="opt" data-i="2" data-c="1">63</button>
+      <button class="opt" data-i="3" data-c="0">29</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f8">
+    <div class="qprompt">🦁 A guide has $100, buys 4 hats at $15 each. How much is left?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">$40</button>
+      <button class="opt" data-i="1" data-c="0">$60</button>
+      <button class="opt" data-i="2" data-c="0">$45</button>
+      <button class="opt" data-i="3" data-c="0">$55</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(6)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(8)">Finish! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 8: Finale ===== -->
+<div class="slide" id="s8">
+  <span class="badge">🌟 You Did It!</span>
+  <h1 style="text-align:center">🎉 Outstanding Safari, Bailey! 🎉</h1>
+  <div class="mascot-row">🦁 🦒 🐘 🦓 🦛</div>
+  <div class="card card-teal" style="text-align:center">
+    <h2>Your Safari Score</h2>
+    <p style="font-size:2.4rem;font-family:'Bangers',cursive;color:var(--navy)">⭐ <span id="finalXP">0</span> XP · 🪙 <span id="finalCoins">0</span> coins</p>
+    <p style="font-size:1.2rem;font-weight:800;color:var(--sunset)" id="finalLvl">Champion!</p>
+  </div>
+  <div class="quote">
+    "A great mathematician breaks a wild problem into calm, careful steps. You proved today that no problem is too big for a patient mind, Bailey."<br><strong>— Coach Jonathan, KingCretot Experience</strong>
+  </div>
+  <div class="card card-sunset" style="text-align:center">
+    <h3>📝 Your Mission Tonight:</h3>
+    <p>Complete your <strong>Unit 7 Post-Lesson Activity Packet</strong> to lock in every skill!</p>
+  </div>
+  <div class="footer-tag">🦁 KingCretot Experience · Bailey's Math Safari · Unit 7 🦁</div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ===== Effects ===== -->
+<div id="confetti"></div>
+<div id="xover"><div class="x">✕</div></div>
+<script>
+/* ============ State ============ */
+const state = { xp:0, coins:0, lvl:1, answered:{} };
+const SLIDES = 9;
+const FINALE = 8;
+
+function updateHud(){
+  document.getElementById('xpVal').textContent = state.xp;
+  document.getElementById('coinVal').textContent = state.coins;
+  document.getElementById('lvlVal').textContent = state.lvl;
+  const pct = Math.min(100, (state.xp % 100));
+  document.getElementById('xpFill').style.width = pct + '%';
+  if (state.xp >= state.lvl * 100) state.lvl++;
+}
+function addXP(n){ state.xp += n; updateHud(); }
+function addCoins(n){ state.coins += n; updateHud(); }
+
+/* ============ Navigation ============ */
+function go(i){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+i).classList.add('active');
+  buildDots(i);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(i === FINALE) showFinal();
+}
+function buildDots(active){
+  document.querySelectorAll('.dots').forEach(d=>{
+    d.innerHTML = '';
+    for (let k=0; k<SLIDES; k++){
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (k===active?' on':'') + (k<active?' done':'');
+      d.appendChild(dot);
+    }
+  });
+}
+
+/* ============ Sound (Web Audio) ============ */
+let audioCtx;
+function getCtx(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playRight(){
+  const c = getCtx();
+  [523, 659, 784, 1047].forEach((f,i)=>{
+    const o = c.createOscillator(), g = c.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,c.currentTime+i*0.08);
+    g.gain.linearRampToValueAtTime(0.18,c.currentTime+i*0.08+0.02);
+    g.gain.linearRampToValueAtTime(0,c.currentTime+i*0.08+0.18);
+    o.connect(g); g.connect(c.destination);
+    o.start(c.currentTime+i*0.08); o.stop(c.currentTime+i*0.08+0.2);
+  });
+}
+function playWrong(){
+  const c = getCtx();
+  const o = c.createOscillator(), g = c.createGain();
+  o.type='sawtooth'; o.frequency.setValueAtTime(220, c.currentTime);
+  o.frequency.linearRampToValueAtTime(80, c.currentTime+0.4);
+  g.gain.setValueAtTime(0.16, c.currentTime);
+  g.gain.linearRampToValueAtTime(0, c.currentTime+0.4);
+  o.connect(g); g.connect(c.destination);
+  o.start(); o.stop(c.currentTime+0.4);
+}
+
+/* ============ Confetti ============ */
+function confetti(){
+  const root = document.getElementById('confetti');
+  root.style.display = 'block';
+  const colors = ['#E0AC3C','#FF9447','#86D464','#7CC6FF','#FFB7D5','#E85D2C','#0E9F9A','#6F3F8F'];
+  for (let i=0; i<70; i++){
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = -10 + 'px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.4) + 's';
+    p.style.animationDuration = (1.2 + Math.random()*1.2) + 's';
+    p.style.borderRadius = (Math.random()>0.5 ? '50%' : '2px');
+    root.appendChild(p);
+  }
+  setTimeout(()=>{ root.innerHTML=''; root.style.display='none'; }, 2400);
+}
+function flashX(){
+  const x = document.getElementById('xover');
+  x.classList.add('show');
+  setTimeout(()=>x.classList.remove('show'), 600);
+}
+
+/* ============ MC Quiz registry (single delegate) ============ */
+document.addEventListener('click', e=>{
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const box = opt.closest('.qbox');
+  if (!box) return;
+  const qid = box.dataset.q;
+  if (state.answered[qid]) return;
+  const correct = opt.dataset.c === '1';
+  const fb = box.querySelector('.feedback');
+  box.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if (correct){
+    opt.classList.add('right');
+    box.classList.add('ok');
+    fb.textContent = '🎉 Correct! Great thinking!';
+    fb.className = 'feedback show ok';
+    addXP(10); addCoins(2);
+    playRight(); confetti();
+  } else {
+    opt.classList.add('wrong');
+    box.classList.add('bad');
+    box.querySelectorAll('.opt').forEach(b=>{
+      if (b.dataset.c === '1') b.classList.add('right');
+    });
+    fb.textContent = '❌ Not quite — see the green answer above. Keep going, you have got this!';
+    fb.className = 'feedback show bad';
+    playWrong(); flashX();
+  }
+  state.answered[qid] = true;
+});
+
+/* ============ Fill-in ============ */
+function checkFill(inputId, correct, fbId){
+  const inp = document.getElementById(inputId);
+  const fb = document.getElementById(fbId);
+  if (state.answered['fill-'+inputId]) return;
+  const val = inp.value.trim().toLowerCase();
+  if (val === String(correct).toLowerCase()){
+    inp.classList.add('ok'); inp.disabled = true;
+    fb.textContent = '✅ Yes! ' + correct;
+    fb.style.color = 'var(--ok)';
+    addXP(8); addCoins(2);
+    playRight(); confetti();
+    state.answered['fill-'+inputId] = true;
+  } else {
+    inp.classList.add('bad');
+    fb.textContent = '❌ Try again!';
+    fb.style.color = 'var(--bad)';
+    playWrong(); flashX();
+    setTimeout(()=>{ inp.classList.remove('bad'); fb.textContent=''; }, 1500);
+  }
+}
+
+/* ============ Final ============ */
+function showFinal(){
+  document.getElementById('finalXP').textContent = state.xp;
+  document.getElementById('finalCoins').textContent = state.coins;
+  let title = 'Safari Mathematician! 🏆';
+  if (state.xp >= 200) title = 'Safari MASTER! 🌟';
+  else if (state.xp >= 120) title = 'Math Tracker! ✨';
+  else if (state.xp >= 60) title = 'Rising Explorer! ⭐';
+  document.getElementById('finalLvl').textContent = title;
+  setTimeout(confetti, 300);
+  setTimeout(confetti, 1200);
+}
+
+updateHud();
+buildDots(0);
+</script>
+</body>
+</html>
