@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 Bailey's End-of-Year Safari Celebration | KingCretot Experience</title>
+<style>
+  :root{
+    --navy:#1B2C5C; --gold:#E0AC3C; --jungle:#1F8A4F; --sunset:#E85D2C;
+    --teal:#0E9F9A; --plum:#6F3F8F; --sand:#FBF4E0; --ink:#1f2937;
+    --ok:#2e9d4a; --bad:#dc2626; --shadow:0 4px 14px rgba(27,44,92,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Bangers&family=Fredoka+One&display=swap');
+  html,body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#FBF4E0 0%,#F0E1B5 50%,#D5EAEA 100%);color:var(--ink);min-height:100vh;font-size:17px;line-height:1.55}
+
+  .hud{position:fixed;top:0;left:0;right:0;background:linear-gradient(135deg,var(--navy),#0f1a3a);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;box-shadow:var(--shadow);flex-wrap:wrap;gap:8px}
+  .hud-left{display:flex;align-items:center;gap:12px;font-family:'Fredoka One',cursive;font-size:1.15rem}
+  .hud-right{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .stat{background:rgba(255,255,255,.13);padding:6px 14px;border-radius:20px;font-weight:800;font-size:.92rem;display:flex;align-items:center;gap:6px}
+  .xpbar{width:130px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}
+  .xpfill{height:100%;background:linear-gradient(90deg,var(--gold),#FFD86F);transition:width .4s;width:0%}
+
+  .wrap{max-width:880px;margin:80px auto 30px;padding:14px}
+  .slide{background:#fff;border-radius:20px;padding:26px;box-shadow:var(--shadow);min-height:520px;display:none;animation:pop .35s ease}
+  .slide.active{display:block}
+  @keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+
+  h1{font-family:'Bangers',cursive;font-size:2.4rem;color:var(--navy);letter-spacing:1.5px;margin-bottom:6px}
+  h2{font-family:'Fredoka One',cursive;font-size:1.7rem;color:var(--navy);margin-bottom:12px}
+  h3{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--sunset);margin:14px 0 8px}
+  p{margin-bottom:10px;font-size:1rem}
+
+  .badge{display:inline-block;padding:5px 14px;border-radius:14px;font-weight:900;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;background:linear-gradient(135deg,var(--gold),#F2C465);color:var(--navy);margin-bottom:8px}
+
+  .btn{padding:13px 26px;border-radius:14px;font-weight:900;border:none;cursor:pointer;font-family:inherit;font-size:1rem;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+  .btn-go{background:linear-gradient(135deg,var(--jungle),#0E6433);color:#fff;box-shadow:0 4px 0 #0a4a26}
+  .btn-go:hover{transform:translateY(-2px)}
+  .btn-back{background:#e5e7eb;color:#374151}
+
+  .nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:10px;flex-wrap:wrap}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+  .dot{width:11px;height:11px;border-radius:50%;background:#cbd5e1;transition:all .2s}
+  .dot.on{background:var(--gold);transform:scale(1.4)}
+  .dot.done{background:var(--jungle)}
+
+  .mascot-row{display:flex;justify-content:center;gap:14px;font-size:3rem;margin:10px 0 18px;flex-wrap:wrap}
+  .mascot{display:inline-block;animation:bob 2.6s ease-in-out infinite}
+  .mascot:nth-child(2){animation-delay:.3s}
+  .mascot:nth-child(3){animation-delay:.6s}
+  .mascot:nth-child(4){animation-delay:.9s}
+  .mascot:nth-child(5){animation-delay:1.2s}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+
+  .card{background:#FBF4E0;border:3px solid #F0E1B5;border-radius:18px;padding:16px;margin:12px 0}
+  .card-teal{background:#E5F4F4;border-color:#A8DEDC}
+  .card-jungle{background:#E8F5EC;border-color:#B5DDC5}
+  .card-sunset{background:#FFF0E8;border-color:#FFD0BB}
+  .card-plum{background:#F2EAF5;border-color:#D5BFE0}
+
+  .qbox{background:#fff;border:3px solid #E2E8F0;border-radius:16px;padding:18px;margin:14px 0;transition:border-color .25s}
+  .qbox.ok{border-color:var(--ok);background:#F0FBF3}
+  .qbox.bad{border-color:var(--bad);background:#FEF2F2}
+  .qprompt{font-weight:800;font-size:1.05rem;margin-bottom:12px;color:var(--navy)}
+  .opts{display:grid;grid-template-columns:1fr;gap:8px}
+  @media(min-width:600px){.opts{grid-template-columns:1fr 1fr}}
+  .opt{background:#fff;border:3px solid #cbd5e1;border-radius:11px;padding:11px 14px;font-weight:700;cursor:pointer;text-align:left;font-family:inherit;font-size:.98rem;transition:all .15s}
+  .opt:hover{border-color:var(--gold);background:#FBF4E0;transform:translateY(-2px)}
+  .opt.right{background:#D9F7E1;border-color:var(--ok);color:#065f46}
+  .opt.wrong{background:#FFE2E2;border-color:var(--bad);color:#991b1b}
+  .opt:disabled{cursor:not-allowed}
+  .feedback{margin-top:10px;padding:12px;border-radius:10px;font-weight:700;font-size:.95rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#D9F7E1;color:#065f46}
+  .feedback.bad{background:#FFE2E2;color:#991b1b}
+
+  .fillrow{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap;background:#FBF4E0;padding:10px 14px;border-radius:12px;border:2px dashed var(--sunset)}
+  .fillrow input{font-family:inherit;font-size:1.05rem;font-weight:800;padding:8px 12px;border:2px solid #cbd5e1;border-radius:9px;width:100px;text-align:center;background:#fff}
+  .fillrow input.ok{border-color:var(--ok);background:#D9F7E1}
+  .fillrow input.bad{border-color:var(--bad);background:#FFE2E2}
+  .checkbtn{padding:9px 18px;border-radius:10px;border:none;background:var(--sunset);color:#fff;font-weight:900;cursor:pointer;font-family:inherit}
+
+  .work{font-family:'Fredoka One',cursive;font-size:1.4rem;text-align:center;background:#FFFEF5;border:3px solid #F0E1B5;border-radius:14px;padding:16px;margin:10px 0;color:var(--navy);line-height:1.7}
+  .work .step{display:block;font-size:1rem;color:var(--sunset);font-weight:700;font-family:'Nunito',sans-serif;margin-top:6px}
+
+  .review-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}
+  @media(min-width:600px){.review-grid{grid-template-columns:1fr 1fr}}
+  .review-card{background:linear-gradient(135deg,#FBF4E0,#fffaf0);border:3px solid #F0E1B5;border-radius:14px;padding:14px;font-weight:700;font-size:.98rem}
+  .review-card strong{color:var(--sunset);display:block;margin-bottom:4px}
+
+  .conv-table{width:100%;border-collapse:separate;border-spacing:0;margin:10px 0;border-radius:12px;overflow:hidden;border:2px solid var(--gold)}
+  .conv-table th,.conv-table td{padding:10px 12px;text-align:left;font-weight:700;font-size:.95rem}
+  .conv-table th{background:var(--navy);color:#fff;font-family:'Fredoka One',cursive}
+  .conv-table tr:nth-child(even){background:#FBF4E0}
+  .conv-table tr:nth-child(odd){background:#fff}
+
+  /* ===== Effects ===== */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:200;display:none}
+  .conf-piece{position:absolute;width:10px;height:10px;animation:fall 1.6s linear forwards}
+  @keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+  #xover{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:150;pointer-events:none}
+  #xover.show{display:flex;animation:xpop .55s ease-out}
+  #xover .x{font-size:9rem;color:var(--bad);font-weight:900;text-shadow:0 0 24px rgba(220,38,38,.5)}
+  @keyframes xpop{0%{transform:scale(.3);opacity:0}40%{transform:scale(1.3);opacity:1}100%{transform:scale(1);opacity:0}}
+
+  .quote{font-style:italic;text-align:center;font-size:1.1rem;color:var(--navy);background:linear-gradient(135deg,#FBF4E0,#F0E1B5);padding:18px;border-radius:16px;border-left:6px solid var(--gold);margin:20px 0}
+  .footer-tag{text-align:center;color:#64748b;font-size:.82rem;margin-top:14px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- ===== HUD ===== -->
+<div class="hud">
+  <div class="hud-left">🎉 Bailey's Safari Celebration</div>
+  <div class="hud-right">
+    <div class="stat"><span class="ico">⭐</span><span id="xpVal">0</span> XP</div>
+    <div class="xpbar"><div class="xpfill" id="xpFill"></div></div>
+    <div class="stat"><span class="ico">🪙</span><span id="coinVal">0</span></div>
+    <div class="stat"><span class="ico">🏆</span> Lvl <span id="lvlVal">1</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+<!-- ===== Slide 0: Welcome ===== -->
+<div class="slide active" id="s0">
+  <span class="badge">🎊 End of Year · Celebration!</span>
+  <h1>🎉 You Did It, Bailey!</h1>
+  <div class="mascot-row">🦁 🐘 🦒 🦓 🐆</div>
+  <div class="card card-teal">
+    <p style="font-size:1.1rem"><strong>What an incredible year!</strong> Today we celebrate everything you learned — and we are going to use it the way real explorers, planners, and writers use it every day. Math, reading, and writing all on one big safari adventure. Time to show what you know! 🌟</p>
+  </div>
+  <h3>🎯 What you'll learn today:</h3>
+  <div class="review-grid">
+    <div class="review-card"><strong>💰 Real-World Math</strong>Money, decimals, and fractions</div>
+    <div class="review-card"><strong>🔍 Reading Power</strong>Theme, inference, and figurative language</div>
+    <div class="review-card"><strong>✍️ Sharp Writing</strong>Conjunctions, grammar, and reports</div>
+    <div class="review-card"><strong>🎮 Safari Fun</strong>Earn XP, coins, and level up!</div>
+  </div>
+  <div class="card card-sunset">
+    <p>🎮 <strong>How to win XP:</strong> Get answers right to earn ⭐ XP and 🪙 coins. Tap an answer to lock it in!</p>
+  </div>
+  <div class="nav">
+    <span></span>
+    <button class="btn btn-go" onclick="go(1)">Let's Begin! 🚀</button>
+  </div>
+</div>
+<!-- ===== Slide 1: Review ===== -->
+<div class="slide" id="s1">
+  <span class="badge">🔁 Quick Review</span>
+  <h2>Warm-Up: A Year of Learning</h2>
+  <p>Let's warm up with a quick mix from across the whole year! 🧠✨</p>
+
+  <div class="qbox" data-q="r1">
+    <div class="qprompt">🦁 Quick! 6 × 7 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">36</button>
+      <button class="opt" data-i="1" data-c="0">48</button>
+      <button class="opt" data-i="2" data-c="1">42</button>
+      <button class="opt" data-i="3" data-c="0">40</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r2">
+    <div class="qprompt">📖 The lesson or message a story teaches is called the —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">setting</button>
+      <button class="opt" data-i="1" data-c="1">theme</button>
+      <button class="opt" data-i="2" data-c="0">title</button>
+      <button class="opt" data-i="3" data-c="0">plot</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r3">
+    <div class="qprompt">🔢 The decimal 0.5 written as a fraction is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/5</button>
+      <button class="opt" data-i="1" data-c="1">1/2</button>
+      <button class="opt" data-i="2" data-c="0">5</button>
+      <button class="opt" data-i="3" data-c="0">1/10</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="r4">
+    <div class="qprompt">🔤 Which word is a conjunction (a joining word)?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">dog</button>
+      <button class="opt" data-i="1" data-c="0">run</button>
+      <button class="opt" data-i="2" data-c="1">and</button>
+      <button class="opt" data-i="3" data-c="0">blue</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(0)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn-go" onclick="go(2)">Next: The Safari Budget! 💰</button>
+  </div>
+</div>
+<!-- ===== Slide 2: Planning the Safari Budget ===== -->
+<div class="slide" id="s2">
+  <span class="badge">💰 Real World</span>
+  <h2>Planning the Safari Budget</h2>
+  <p>Every real trip needs a <strong>budget</strong>. Planners add money, count costs, and figure out change — using <strong>multi-step math</strong> and <strong>decimals</strong>. 💵</p>
+  <div class="card card-teal">
+    <h3>🧮 Money Math</h3>
+    <p>Money uses decimals: <strong>$3.50</strong> means 3 dollars and 50 cents. To find change, subtract what you spent from what you had.</p>
+  </div>
+  <div class="card card-jungle">
+    <h3>🎟️ Budget Check</h3>
+    <p>A safari ticket costs $12. For a family of 4, multiply: 12 × 4. Then check it against your budget.</p>
+    <div class="fillrow">
+      <span>$3.50 + $2.25 = $</span>
+      <input type="text" id="m1" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('m1','5.75','m1fb')">Check</button>
+      <span id="m1fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="s1a">
+    <div class="qprompt">🎟️ A safari ticket costs $12. How much for 4 tickets?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">$36</button>
+      <button class="opt" data-i="1" data-c="1">$48</button>
+      <button class="opt" data-i="2" data-c="0">$44</button>
+      <button class="opt" data-i="3" data-c="0">$52</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s1b">
+    <div class="qprompt">💵 You have $20 and spend $13.50. How much CHANGE?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">$7.50</button>
+      <button class="opt" data-i="1" data-c="0">$6.00</button>
+      <button class="opt" data-i="2" data-c="1">$6.50</button>
+      <button class="opt" data-i="3" data-c="0">$7.00</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s1c">
+    <div class="qprompt">🔢 0.7 + 0.2 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">0.9</button>
+      <button class="opt" data-i="1" data-c="0">0.5</button>
+      <button class="opt" data-i="2" data-c="0">1.0</button>
+      <button class="opt" data-i="3" data-c="0">0.72</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(1)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(3)">Next: Sharing Supplies! 🎒</button>
+  </div>
+</div>
+<!-- ===== Slide 3: Sharing Supplies on the Trail ===== -->
+<div class="slide" id="s3">
+  <span class="badge">🎒 Real World</span>
+  <h2>Sharing Supplies on the Trail</h2>
+  <p>Explorers split supplies fairly — that means <strong>fractions</strong>: equivalent fractions, simplifying, adding, and multiplying. 🥤</p>
+  <div class="card card-sunset">
+    <h3>🧩 Fraction Skills</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Equivalent</strong>Same value: 1/2 = 2/4</div>
+      <div class="review-card"><strong>Simplify</strong>Reduce: 2/6 = 1/3</div>
+      <div class="review-card"><strong>Add (like)</strong>1/4 + 2/4 = 3/4</div>
+      <div class="review-card"><strong>Multiply</strong>3 × 1/5 = 3/5</div>
+    </div>
+  </div>
+  <div class="card card-plum">
+    <h3>🥤 Try it!</h3>
+    <p>Fill in the missing number to make the fractions equal:</p>
+    <div class="fillrow">
+      <span>1/2 = </span>
+      <input type="text" id="m2" maxlength="6"><span>/4</span>
+      <button class="checkbtn" onclick="checkFill('m2','2','m2fb')">Check</button>
+      <span id="m2fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="s2a">
+    <div class="qprompt">🧩 Simplify the fraction 2/6 to lowest terms —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/2</button>
+      <button class="opt" data-i="1" data-c="0">2/3</button>
+      <button class="opt" data-i="2" data-c="0">1/6</button>
+      <button class="opt" data-i="3" data-c="1">1/3</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s2b">
+    <div class="qprompt">➕ 1/4 + 2/4 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">3/4</button>
+      <button class="opt" data-i="1" data-c="0">3/8</button>
+      <button class="opt" data-i="2" data-c="0">2/4</button>
+      <button class="opt" data-i="3" data-c="0">1/2</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s2c">
+    <div class="qprompt">✖️ 3 × 1/5 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">1/5</button>
+      <button class="opt" data-i="1" data-c="1">3/5</button>
+      <button class="opt" data-i="2" data-c="0">3/15</button>
+      <button class="opt" data-i="3" data-c="0">4/5</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(2)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(4)">Next: The Field Journal! 🔍</button>
+  </div>
+</div>
+<!-- ===== Slide 4: Writing the Field Journal ===== -->
+<div class="slide" id="s4">
+  <span class="badge">🔍 Real World</span>
+  <h2>Writing the Field Journal</h2>
+  <p>A good field journal needs sharp reading skills — <strong>theme</strong>, <strong>inference</strong>, and <strong>figurative language</strong> that paints a picture. 📓</p>
+  <div class="card card-teal">
+    <h3>🎨 Figurative Language</h3>
+    <div class="review-grid">
+      <div class="review-card"><strong>Simile</strong>compares with like or as</div>
+      <div class="review-card"><strong>Idiom</strong>a saying with a hidden meaning</div>
+      <div class="review-card"><strong>Hyperbole</strong>a big exaggeration</div>
+      <div class="review-card"><strong>Alliteration</strong>repeating beginning sounds</div>
+    </div>
+  </div>
+  <div class="card card-jungle">
+    <h3>📝 Try it!</h3>
+    <p>A simile compares two things using "like" or "as." Fill the blank: "The lion is as brave ___ a king."</p>
+    <div class="fillrow">
+      <span>as brave </span>
+      <input type="text" id="m3" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('m3','as','m3fb')">Check</button>
+      <span id="m3fb" style="font-weight:800"></span>
+    </div> a king
+  </div>
+
+  <div class="qbox" data-q="s3a">
+    <div class="qprompt">🌧️ "It is raining cats and dogs" is an example of —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">a fact</button>
+      <button class="opt" data-i="1" data-c="1">an idiom</button>
+      <button class="opt" data-i="2" data-c="0">a question</button>
+      <button class="opt" data-i="3" data-c="0">a list</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s3b">
+    <div class="qprompt">📖 The big lesson or message of a story is the —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">theme</button>
+      <button class="opt" data-i="1" data-c="0">setting</button>
+      <button class="opt" data-i="2" data-c="0">plot</button>
+      <button class="opt" data-i="3" data-c="0">character</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s3c">
+    <div class="qprompt">🔊 "Super soft socks" repeats the S sound. This is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">alliteration</button>
+      <button class="opt" data-i="1" data-c="0">hyperbole</button>
+      <button class="opt" data-i="2" data-c="0">an idiom</button>
+      <button class="opt" data-i="3" data-c="0">a simile</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(3)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(5)">Next: The Trip Report! ✍️</button>
+  </div>
+</div>
+<!-- ===== Slide 5: Writing the Trip Report ===== -->
+<div class="slide" id="s5">
+  <span class="badge">✍️ Real World</span>
+  <h2>Writing the Trip Report</h2>
+  <p>Reports must be <strong>clear and correct</strong>. That means <strong>conjunctions</strong>, <strong>verb tense</strong>, and <strong>subject-verb agreement</strong>. 📄</p>
+  <div class="card card-sunset">
+    <h3>🔗 Joining Words (FANBOYS)</h3>
+    <p>Coordinating conjunctions join ideas: <strong>for, and, nor, but, or, yet, so.</strong> Example: "I wanted to hike, <strong>but</strong> it rained."</p>
+  </div>
+  <div class="card card-plum">
+    <h3>📝 Try it!</h3>
+    <p>Pick the joining word that shows a difference: "We packed water, ___ we forgot snacks."</p>
+    <div class="fillrow">
+      <span>water, </span>
+      <input type="text" id="m4" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('m4','but','m4fb')">Check</button>
+      <span id="m4fb" style="font-weight:800"></span>
+    </div> we forgot snacks
+  </div>
+
+  <div class="qbox" data-q="s4a">
+    <div class="qprompt">✅ Which sentence has correct subject-verb agreement?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">The lion run fast.</button>
+      <button class="opt" data-i="1" data-c="0">The lions runs fast.</button>
+      <button class="opt" data-i="2" data-c="1">The lion runs fast.</button>
+      <button class="opt" data-i="3" data-c="0">The lion are fast.</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s4b">
+    <div class="qprompt">⏪ What is the past tense of the verb "go"?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">goes</button>
+      <button class="opt" data-i="1" data-c="0">going</button>
+      <button class="opt" data-i="2" data-c="1">went</button>
+      <button class="opt" data-i="3" data-c="0">gone</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s4c">
+    <div class="qprompt">🔗 Which word is a coordinating conjunction (FANBOYS)?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">or</button>
+      <button class="opt" data-i="1" data-c="0">the</button>
+      <button class="opt" data-i="2" data-c="0">happy</button>
+      <button class="opt" data-i="3" data-c="0">slowly</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(4)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(6)">Next: Decoding Facts! 🦓</button>
+  </div>
+</div>
+<!-- ===== Slide 6: Decoding the Animal Facts ===== -->
+<div class="slide" id="s6">
+  <span class="badge">🦓 Real World</span>
+  <h2>Decoding the Animal Facts</h2>
+  <p>Real readers pull <strong>main ideas</strong> and <strong>conclusions</strong> out of nonfiction. Let's decode some animal facts! 📚</p>
+  <div class="card card-teal">
+    <h3>📚 Read this:</h3>
+    <p><em>The aardvark sleeps in its burrow all day. At night, it comes out to dig for ants and termites with its strong claws.</em></p>
+    <p><strong>Main idea:</strong> the aardvark is active at night. <strong>Key details:</strong> sleeps by day, hunts at night.</p>
+  </div>
+  <div class="card card-jungle">
+    <h3>🔍 Try it!</h3>
+    <p>Using clues to figure out something the text does not say directly is called making an inference, or to ___ . (type the word)</p>
+    <div class="fillrow">
+      <span>to </span>
+      <input type="text" id="m5" maxlength="6">
+      <button class="checkbtn" onclick="checkFill('m5','infer','m5fb')">Check</button>
+      <span id="m5fb" style="font-weight:800"></span>
+    </div>
+  </div>
+
+  <div class="qbox" data-q="s5a">
+    <div class="qprompt">🧩 The main idea of a passage is supported by key —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">details</button>
+      <button class="opt" data-i="1" data-c="0">covers</button>
+      <button class="opt" data-i="2" data-c="0">titles</button>
+      <button class="opt" data-i="3" data-c="0">pages</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s5b">
+    <div class="qprompt">📝 A good summary is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">every single detail</button>
+      <button class="opt" data-i="1" data-c="0">longer than the text</button>
+      <button class="opt" data-i="2" data-c="0">only the title</button>
+      <button class="opt" data-i="3" data-c="1">short and about the main ideas</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="s5c">
+    <div class="qprompt">🦓 The passage says the aardvark sleeps all day and hunts at night. You can conclude it is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">extinct</button>
+      <button class="opt" data-i="1" data-c="1">nocturnal</button>
+      <button class="opt" data-i="2" data-c="0">a plant</button>
+      <button class="opt" data-i="3" data-c="0">very loud</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(5)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(7)">Final Safari Quiz! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 7: Final Quiz ===== -->
+<div class="slide" id="s7">
+  <span class="badge">🏆 Final Challenge</span>
+  <h2>The End-of-Year Safari Quiz!</h2>
+  <p>One last adventure challenge — show off a whole year of learning, Bailey! 🎉🏆</p>
+
+  <div class="qbox" data-q="f1">
+    <div class="qprompt">🦁 8 × 6 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">42</button>
+      <button class="opt" data-i="1" data-c="0">54</button>
+      <button class="opt" data-i="2" data-c="0">40</button>
+      <button class="opt" data-i="3" data-c="1">48</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f2">
+    <div class="qprompt">🧩 1/3 + 1/3 = ?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">2/6</button>
+      <button class="opt" data-i="1" data-c="0">1/3</button>
+      <button class="opt" data-i="2" data-c="0">1/2</button>
+      <button class="opt" data-i="3" data-c="1">2/3</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f3">
+    <div class="qprompt">🔢 The decimal 0.25 written as a fraction is —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="1">1/4</button>
+      <button class="opt" data-i="1" data-c="0">1/2</button>
+      <button class="opt" data-i="2" data-c="0">2/5</button>
+      <button class="opt" data-i="3" data-c="0">1/25</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f4">
+    <div class="qprompt">💬 "She has a heart of gold" is an example of —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">a fact</button>
+      <button class="opt" data-i="1" data-c="0">a question</button>
+      <button class="opt" data-i="2" data-c="0">a simile</button>
+      <button class="opt" data-i="3" data-c="1">an idiom</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f5">
+    <div class="qprompt">📖 The lesson a story teaches is called the —</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">setting</button>
+      <button class="opt" data-i="1" data-c="0">plot</button>
+      <button class="opt" data-i="2" data-c="0">title</button>
+      <button class="opt" data-i="3" data-c="1">theme</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f6">
+    <div class="qprompt">✅ Which sentence is written CORRECTLY?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">The bird sing.</button>
+      <button class="opt" data-i="1" data-c="1">The bird sings.</button>
+      <button class="opt" data-i="2" data-c="0">The birds sings.</button>
+      <button class="opt" data-i="3" data-c="0">The bird are sing.</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="qbox" data-q="f7">
+    <div class="qprompt">🎟️ A ticket costs $9. How much for 5 tickets?</div>
+    <div class="opts">
+      <button class="opt" data-i="0" data-c="0">$40</button>
+      <button class="opt" data-i="1" data-c="0">$54</button>
+      <button class="opt" data-i="2" data-c="1">$45</button>
+      <button class="opt" data-i="3" data-c="0">$36</button>
+    </div>
+    <div class="feedback"></div>
+  </div>
+  <div class="nav">
+    <button class="btn btn-back" onclick="go(6)">← Back</button>
+    <div class="dots"></div>
+    <button class="btn btn-go" onclick="go(8)">Finish! 🏆</button>
+  </div>
+</div>
+<!-- ===== Slide 8: Finale ===== -->
+<div class="slide" id="s8">
+  <span class="badge">🌟 You Did It!</span>
+  <h1 style="text-align:center">🎉 Outstanding, Bailey — A Whole Year Conquered! 🎉</h1>
+  <div class="mascot-row">🦁 🐘 🦒 🦓 🐆</div>
+  <div class="card card-teal" style="text-align:center">
+    <h2>Your Safari Score</h2>
+    <p style="font-size:2.4rem;font-family:'Bangers',cursive;color:var(--navy)">⭐ <span id="finalXP">0</span> XP · 🪙 <span id="finalCoins">0</span> coins</p>
+    <p style="font-size:1.2rem;font-weight:800;color:var(--sunset)" id="finalLvl">Champion!</p>
+  </div>
+  <div class="quote">
+    "You have grown so much this year, Bailey — your reading is sharper, your math is stronger, and your writing is clearer than ever. These are skills real explorers and leaders use every day. I could not be prouder of you. Enjoy your summer!"<br><strong>— Coach Jonathan, KingCretot Experience</strong>
+  </div>
+  <div class="card card-sunset" style="text-align:center">
+    <h3>📝 Your Mission Tonight:</h3>
+    <p>Bring your <strong>Celebration Companion Packet</strong> to class — and save the <strong>Fun Activities Packet</strong> for your celebration day!</p>
+  </div>
+  <div class="footer-tag">🎉 KingCretot Experience · Bailey's End-of-Year Safari Celebration 🎉</div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ===== Effects ===== -->
+<div id="confetti"></div>
+<div id="xover"><div class="x">✕</div></div>
+<script>
+/* ============ State ============ */
+const state = { xp:0, coins:0, lvl:1, answered:{} };
+const SLIDES = 9;
+const FINALE = 8;
+
+function updateHud(){
+  document.getElementById('xpVal').textContent = state.xp;
+  document.getElementById('coinVal').textContent = state.coins;
+  document.getElementById('lvlVal').textContent = state.lvl;
+  const pct = Math.min(100, (state.xp % 100));
+  document.getElementById('xpFill').style.width = pct + '%';
+  if (state.xp >= state.lvl * 100) state.lvl++;
+}
+function addXP(n){ state.xp += n; updateHud(); }
+function addCoins(n){ state.coins += n; updateHud(); }
+
+/* ============ Navigation ============ */
+function go(i){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+i).classList.add('active');
+  buildDots(i);
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(i === FINALE) showFinal();
+}
+function buildDots(active){
+  document.querySelectorAll('.dots').forEach(d=>{
+    d.innerHTML = '';
+    for (let k=0; k<SLIDES; k++){
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (k===active?' on':'') + (k<active?' done':'');
+      d.appendChild(dot);
+    }
+  });
+}
+
+/* ============ Sound (Web Audio) ============ */
+let audioCtx;
+function getCtx(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playRight(){
+  const c = getCtx();
+  [523, 659, 784, 1047].forEach((f,i)=>{
+    const o = c.createOscillator(), g = c.createGain();
+    o.type='sine'; o.frequency.value=f;
+    g.gain.setValueAtTime(0,c.currentTime+i*0.08);
+    g.gain.linearRampToValueAtTime(0.18,c.currentTime+i*0.08+0.02);
+    g.gain.linearRampToValueAtTime(0,c.currentTime+i*0.08+0.18);
+    o.connect(g); g.connect(c.destination);
+    o.start(c.currentTime+i*0.08); o.stop(c.currentTime+i*0.08+0.2);
+  });
+}
+function playWrong(){
+  const c = getCtx();
+  const o = c.createOscillator(), g = c.createGain();
+  o.type='sawtooth'; o.frequency.setValueAtTime(220, c.currentTime);
+  o.frequency.linearRampToValueAtTime(80, c.currentTime+0.4);
+  g.gain.setValueAtTime(0.16, c.currentTime);
+  g.gain.linearRampToValueAtTime(0, c.currentTime+0.4);
+  o.connect(g); g.connect(c.destination);
+  o.start(); o.stop(c.currentTime+0.4);
+}
+
+/* ============ Confetti ============ */
+function confetti(){
+  const root = document.getElementById('confetti');
+  root.style.display = 'block';
+  const colors = ['#E0AC3C','#FF9447','#86D464','#7CC6FF','#FFB7D5','#E85D2C','#0E9F9A','#6F3F8F'];
+  for (let i=0; i<70; i++){
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = -10 + 'px';
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDelay = (Math.random()*0.4) + 's';
+    p.style.animationDuration = (1.2 + Math.random()*1.2) + 's';
+    p.style.borderRadius = (Math.random()>0.5 ? '50%' : '2px');
+    root.appendChild(p);
+  }
+  setTimeout(()=>{ root.innerHTML=''; root.style.display='none'; }, 2400);
+}
+function flashX(){
+  const x = document.getElementById('xover');
+  x.classList.add('show');
+  setTimeout(()=>x.classList.remove('show'), 600);
+}
+
+/* ============ MC Quiz registry (single delegate) ============ */
+document.addEventListener('click', e=>{
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const box = opt.closest('.qbox');
+  if (!box) return;
+  const qid = box.dataset.q;
+  if (state.answered[qid]) return;
+  const correct = opt.dataset.c === '1';
+  const fb = box.querySelector('.feedback');
+  box.querySelectorAll('.opt').forEach(b=>b.disabled=true);
+  if (correct){
+    opt.classList.add('right');
+    box.classList.add('ok');
+    fb.textContent = '🎉 Correct! Great thinking!';
+    fb.className = 'feedback show ok';
+    addXP(10); addCoins(2);
+    playRight(); confetti();
+  } else {
+    opt.classList.add('wrong');
+    box.classList.add('bad');
+    box.querySelectorAll('.opt').forEach(b=>{
+      if (b.dataset.c === '1') b.classList.add('right');
+    });
+    fb.textContent = '❌ Not quite — see the green answer above. Keep going, you have got this!';
+    fb.className = 'feedback show bad';
+    playWrong(); flashX();
+  }
+  state.answered[qid] = true;
+});
+
+/* ============ Fill-in ============ */
+function checkFill(inputId, correct, fbId){
+  const inp = document.getElementById(inputId);
+  const fb = document.getElementById(fbId);
+  if (state.answered['fill-'+inputId]) return;
+  const val = inp.value.trim().toLowerCase();
+  if (val === String(correct).toLowerCase()){
+    inp.classList.add('ok'); inp.disabled = true;
+    fb.textContent = '✅ Yes! ' + correct;
+    fb.style.color = 'var(--ok)';
+    addXP(8); addCoins(2);
+    playRight(); confetti();
+    state.answered['fill-'+inputId] = true;
+  } else {
+    inp.classList.add('bad');
+    fb.textContent = '❌ Try again!';
+    fb.style.color = 'var(--bad)';
+    playWrong(); flashX();
+    setTimeout(()=>{ inp.classList.remove('bad'); fb.textContent=''; }, 1500);
+  }
+}
+
+/* ============ Final ============ */
+function showFinal(){
+  document.getElementById('finalXP').textContent = state.xp;
+  document.getElementById('finalCoins').textContent = state.coins;
+  let title = 'Safari Scout! 🏆';
+  if (state.xp >= 200) title = 'Grade 4 SUPERSTAR! 🌟';
+  else if (state.xp >= 120) title = 'Year-End Champion! ✨';
+  else if (state.xp >= 60) title = 'Trail Star! ⭐';
+  document.getElementById('finalLvl').textContent = title;
+  setTimeout(confetti, 300);
+  setTimeout(confetti, 1200);
+}
+
+updateHud();
+buildDots(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>KCE Summer 2026 • Bailey • Math 2b • Prime Number Observatory</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;font-size:18px;background:radial-gradient(ellipse at top,#10204A 0%,#070D26 60%,#000 100%);color:#E8ECF5;min-height:100vh}
+body{padding-bottom:60px}
+header.kce{background:linear-gradient(90deg,#0B1F4A,#1B2C5C);color:#fff;padding:14px 24px;border-bottom:5px solid #E0AC3C;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+header.kce .brand{font-family:'Orbitron',sans-serif;font-size:20px;letter-spacing:2px}
+header.kce .brand small{display:block;font-size:11px;color:#E0AC3C;letter-spacing:2px;margin-top:2px}
+.hud{display:flex;gap:12px;align-items:center;font-weight:800}
+.hud .pill{background:rgba(224,172,60,.1);border:1px solid #E0AC3C;border-radius:6px;padding:6px 12px;font-size:14px;color:#fff;display:flex;gap:6px;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.hud .pill .v{color:#FFE9A8;min-width:22px;text-align:right}
+.xpbar{height:6px;background:rgba(255,255,255,.15);border-radius:3px;width:110px;overflow:hidden;border:1px solid #1B2C5C}
+.xpbar .fill{height:100%;width:0%;background:linear-gradient(90deg,#E0AC3C,#FFE9A8);transition:width .6s;box-shadow:0 0 8px #E0AC3C}
+main{max-width:1080px;margin:24px auto;padding:0 20px}
+.title-card{background:linear-gradient(135deg,rgba(27,44,92,.6),rgba(11,31,74,.4));border-radius:16px;padding:30px 26px;text-align:center;border:2px solid #E0AC3C;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(224,172,60,.25)}
+.title-card::before{content:"🔭";position:absolute;top:-14px;right:-10px;font-size:130px;opacity:.07;transform:rotate(15deg)}
+.title-card h1{font-family:'Orbitron',sans-serif;font-size:32px;color:#FFE9A8;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(224,172,60,.4)}
+.title-card .sub{font-size:16px;color:#E0AC3C;font-weight:800;margin-bottom:6px;letter-spacing:1px}
+.title-card .stand{display:inline-block;background:rgba(224,172,60,.1);color:#FFE9A8;padding:6px 14px;border-radius:4px;font-size:12px;font-weight:700;margin-top:10px;border:1px solid #E0AC3C}
+.badge{display:inline-block;background:#E0AC3C;color:#0B1F4A;font-family:'Orbitron',sans-serif;font-size:11px;padding:5px 14px;border-radius:4px;margin-top:8px;letter-spacing:1px;font-weight:800}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 14px;justify-content:center}
+.tab{background:rgba(27,44,92,.5);border:1px solid #3B6CB7;color:#E8ECF5;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;padding:10px 14px;border-radius:4px;cursor:pointer;transition:.2s;text-transform:uppercase}
+.tab:hover{border-color:#E0AC3C;background:rgba(224,172,60,.1)}
+.tab.active{background:#E0AC3C;color:#0B1F4A;border-color:#E0AC3C;box-shadow:0 0 12px rgba(224,172,60,.4)}
+.tab.done{background:#3B6CB7;color:#fff;border-color:#3B6CB7}
+.tab.done::before{content:"✦ "}
+.card{background:linear-gradient(135deg,rgba(27,44,92,.5),rgba(11,31,74,.3));border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.5);margin-bottom:22px;border:1px solid #1B2C5C;display:none}
+.card.active{display:block;animation:fadeUp .5s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card h2{font-family:'Orbitron',sans-serif;color:#FFE9A8;font-size:23px;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.card h2 .emoji{font-size:28px}
+.card .lead{font-size:16px;color:#E8ECF5;margin-bottom:18px;background:rgba(59,108,183,.15);border-left:4px solid #3B6CB7;padding:14px 16px;border-radius:4px;line-height:1.6}
+.card .lead b{color:#FFE9A8}
+.card h3{font-family:'Orbitron',sans-serif;color:#3B6CB7;font-size:16px;margin:20px 0 10px;letter-spacing:1px}
+.review-banner{background:linear-gradient(135deg,rgba(224,172,60,.2),rgba(59,108,183,.2));border:1px dashed #E0AC3C;border-radius:8px;padding:14px 16px;margin:10px 0;color:#E8ECF5;line-height:1.6}
+.review-banner .l{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:1.5px;color:#FFE9A8;display:block;margin-bottom:6px}
+.review-banner b{color:#FFE9A8}
+.example-box{background:rgba(0,0,0,.35);border:1px solid #3B6CB7;border-radius:8px;padding:16px;margin:14px 0;font-family:'Orbitron',sans-serif;font-size:18px;text-align:center;color:#FFE9A8;line-height:1.5}
+.example-box .step{display:block;font-family:'Inter',sans-serif;color:#E8ECF5;font-size:13px;margin-top:8px;font-weight:400;line-height:1.5}
+/* FACTOR FINDER */
+.ff-wrap{background:rgba(0,0,0,.3);border:1px solid #E0AC3C;border-radius:10px;padding:18px;margin:14px 0}
+.ff-target{font-family:'Orbitron',sans-serif;font-size:20px;color:#FFE9A8;text-align:center;margin-bottom:12px}
+.ff-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:8px}
+.ffn{background:rgba(27,44,92,.6);border:2px solid #3B6CB7;border-radius:6px;padding:12px 4px;text-align:center;font-family:'Orbitron',sans-serif;font-size:18px;color:#E8ECF5;cursor:pointer;transition:.15s;user-select:none}
+.ffn:hover{border-color:#E0AC3C;transform:scale(1.08)}
+.ffn.picked{background:#3B6CB7;color:#fff;border-color:#FFE9A8}
+.ffn.correct{background:linear-gradient(135deg,#5FB3B3,#3B8E8E);color:#fff;border-color:#FFE9A8;animation:hit .4s}
+.ffn.wrong{background:#8B2E2E;color:#fff;border-color:#8B2E2E;animation:shake .4s}
+.ff-check{margin-top:12px;text-align:center}
+/* SORTING */
+.sort-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0;min-height:50px;padding:10px;background:rgba(0,0,0,.25);border-radius:8px}
+.sort-item{background:rgba(27,44,92,.6);border:2px solid #3B6CB7;border-radius:6px;padding:10px 16px;font-family:'Orbitron',sans-serif;font-size:17px;color:#E8ECF5;cursor:pointer;transition:.15s}
+.sort-item:hover{transform:scale(1.06);border-color:#E0AC3C}
+.sort-item.sel{border-color:#E0AC3C;background:rgba(224,172,60,.2)}
+.sort-bins{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+.sbin{background:rgba(0,0,0,.3);border:2px dashed #3B6CB7;border-radius:8px;padding:14px;min-height:90px}
+.sbin .bl{font-family:'Orbitron',sans-serif;text-align:center;color:#FFE9A8;font-size:13px;margin-bottom:8px;letter-spacing:1px}
+.sbin .holder{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.sbin .chip{background:#3B6CB7;color:#fff;border-radius:4px;padding:6px 12px;font-weight:800;font-size:15px;font-family:'Orbitron'}
+.sbin .chip.bad{background:#8B2E2E}
+/* FACTOR TREE */
+.tree-wrap{background:rgba(0,0,0,.3);border:1px solid #E0AC3C;border-radius:10px;padding:20px;margin:14px 0;text-align:center}
+.tree-node{display:inline-block;background:rgba(27,44,92,.7);border:2px solid #3B6CB7;border-radius:50%;width:54px;height:54px;line-height:50px;font-family:'Orbitron',sans-serif;font-size:18px;color:#FFE9A8;margin:6px}
+.tree-node.prime{background:linear-gradient(135deg,#5FB3B3,#3B8E8E);border-color:#FFE9A8;color:#fff}
+.tree-row{margin:8px 0}
+.tree-branch{color:#3B6CB7;font-size:20px;margin:0 14px}
+.tree-step{background:rgba(59,108,183,.15);border-radius:6px;padding:10px;margin:10px 0;font-size:14px;color:#E8ECF5;display:none}
+.tree-step.show{display:block;animation:fadeUp .4s}
+.q{background:rgba(0,0,0,.25);border:1px solid #3B6CB7;border-radius:8px;padding:18px;margin:14px 0;border-left:4px solid #E0AC3C}
+.q .qnum{display:inline-block;background:#E0AC3C;color:#0B1F4A;font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;padding:4px 10px;border-radius:3px;margin-right:8px;font-weight:800}
+.q .qtxt{font-size:17px;font-weight:600;color:#FFE9A8;margin:6px 0 12px;display:inline}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.q .opt{background:rgba(27,44,92,.5);border:1px solid #3B6CB7;border-radius:6px;padding:12px 14px;font-size:16px;font-weight:600;cursor:pointer;transition:.2s;text-align:left;color:#E8ECF5}
+.q .opt:hover{border-color:#E0AC3C;background:rgba(224,172,60,.1)}
+.q .opt.correct{background:#3B6CB7;color:#fff;border-color:#FFE9A8;animation:hit .5s}
+.q .opt.wrong{background:#8B2E2E;color:#fff;border-color:#8B2E2E;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes hit{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+.q .fb{margin-top:10px;padding:10px 14px;border-radius:6px;display:none;font-weight:700;font-size:14px;line-height:1.5}
+.q .fb.ok{background:rgba(95,179,179,.2);color:#5FB3B3;display:block;border:1px solid #5FB3B3}
+.q .fb.no{background:rgba(139,46,46,.2);color:#FFAEAE;display:block;border:1px dashed #8B2E2E}
+.brain{background:linear-gradient(135deg,rgba(139,46,46,.3),rgba(11,31,74,.5));border:2px solid #E0AC3C;border-radius:10px;padding:18px;margin:14px 0}
+.brain .bt{font-family:'Orbitron',sans-serif;color:#FFE9A8;font-size:15px;margin-bottom:8px;letter-spacing:1px}
+.btn{background:linear-gradient(135deg,#E0AC3C,#C99A2E);color:#0B1F4A;font-family:'Orbitron',sans-serif;font-size:13px;padding:11px 22px;border:none;border-radius:4px;cursor:pointer;letter-spacing:1.5px;font-weight:800;transition:.15s;text-transform:uppercase}
+.btn:hover{box-shadow:0 0 16px rgba(224,172,60,.6);transform:translateY(-1px)}
+.btn.next{background:linear-gradient(135deg,#3B6CB7,#1B2C5C);color:#fff}
+.btn.ghost{background:transparent;color:#E0AC3C;border:1px solid #E0AC3C}
+.nav-row{display:flex;justify-content:space-between;margin-top:18px;gap:10px}
+.tool-msg{text-align:center;font-family:'Orbitron',sans-serif;font-size:14px;padding:10px;border-radius:6px;margin:10px 0;display:none;letter-spacing:1px}
+.tool-msg.win{background:rgba(95,179,179,.2);color:#5FB3B3;display:block;border:1px solid #5FB3B3;animation:hit .5s}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:200}
+.confetti-piece{position:absolute;width:8px;height:12px;opacity:.9}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+footer.kce{position:fixed;bottom:0;left:0;right:0;background:#0B1F4A;color:#E8ECF5;padding:8px 24px;border-top:3px solid #E0AC3C;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;z-index:40;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+footer.kce .gradelvl{color:#E0AC3C}
+footer.kce .contact{color:#FFE9A8;text-align:right}
+.victory{display:none;background:linear-gradient(135deg,rgba(224,172,60,.2),rgba(11,31,74,.6));border:2px solid #E0AC3C;border-radius:14px;padding:32px;text-align:center;margin:18px 0;box-shadow:0 0 40px rgba(224,172,60,.4)}
+.victory.show{display:block;animation:fadeUp .6s}
+.victory h2{font-family:'Orbitron',sans-serif;color:#FFE9A8;font-size:24px;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(224,172,60,.6)}
+.victory .crown{font-size:52px;margin:8px 0;letter-spacing:6px}
+.victory .quote{background:rgba(0,0,0,.4);border-radius:6px;padding:18px;margin-top:14px;color:#E8ECF5;font-size:14px;font-style:italic;border-left:3px solid #E0AC3C}
+.victory .quote .who{display:block;font-style:normal;font-weight:800;color:#E0AC3C;margin-top:8px;font-family:'Orbitron',sans-serif;letter-spacing:1px}
+.progress-dots{display:flex;justify-content:center;gap:6px;margin:14px 0}
+.dot{width:11px;height:11px;border-radius:50%;background:rgba(27,44,92,.6);border:1px solid #3B6CB7;transition:.3s}
+.dot.done{background:#E0AC3C;border-color:#FFE9A8}
+.dot.cur{background:#3B6CB7;border-color:#E0AC3C;box-shadow:0 0 8px #3B6CB7;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@media(max-width:680px){.title-card h1{font-size:22px}.q .opts{grid-template-columns:1fr}.sort-bins{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="kce">
+  <div class="brand">KCE 🔭 PRIME OBSERVATORY<small>SUMMER 2026 • WEEK 2b MATH</small></div>
+  <div class="hud">
+    <div class="pill">✦ <span class="v" id="hudXp">0</span></div>
+    <div class="pill">🛰 <span class="v" id="hudCoin">0</span></div>
+    <div class="pill">LVL <span class="v" id="hudLvl">1</span></div>
+    <div class="xpbar"><div class="fill" id="hudBar"></div></div>
+  </div>
+</header>
+
+<main>
+  <div class="title-card">
+    <h1>🔭 PRIME NUMBER OBSERVATORY 🔭</h1>
+    <div class="sub">BAILEY • GRADE 4 • WEEK 2b • EXTENSION MISSION</div>
+    <p style="color:#E8ECF5;font-size:15px;margin-top:6px">Map the hidden structure of numbers — factors, multiples, and the rare primes.</p>
+    <span class="badge">★ CHALLENGE LEVEL: LEAD ASTRONOMER</span><br>
+    <span class="stand">Florida B.E.S.T.: MA.4.AR.3.1 • MA.4.AR.3.2 • MA.4.OA.4 • MA.4.NSO.1</span>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-go="s0">I · Mission Briefing</button>
+    <button class="tab" data-go="s1">II · Factor Finder</button>
+    <button class="tab" data-go="s2">III · Multiple Mapper</button>
+    <button class="tab" data-go="s3">IV · Prime Scanner</button>
+    <button class="tab" data-go="s4">V · Factor Trees</button>
+    <button class="tab" data-go="s5">VI · Cosmic Challenge</button>
+  </div>
+
+  <div class="progress-dots" id="dots">
+    <div class="dot cur"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <!-- S0 BRIEFING -->
+  <section class="card active" id="s0">
+    <h2><span class="emoji">📡</span>I · Mission Briefing</h2>
+    <div class="review-banner">
+      <span class="l">PRIOR MISSION RECAP — GALAXY VAULT</span>
+      In <b>Galaxy Vault</b> you mastered <b>place value to the millions</b>, <b>expanded form</b>, <b>rounding</b>, and <b>comparing large numbers</b>. Today the Observatory needs you to look DEEPER — into the building blocks numbers are made of. Calibrate your instruments below.
+    </div>
+
+    <div class="q"><span class="qnum">R1</span><span class="qtxt">What is <b>3,408,167</b> rounded to the nearest hundred thousand?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">3,000,000</button>
+        <button class="opt" data-i="1">3,400,000</button>
+        <button class="opt" data-i="2">3,500,000</button>
+        <button class="opt" data-i="3">3,410,000</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">R2</span><span class="qtxt">Which symbol makes it true: <b>72,650 ___ 72,560</b>?</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">&gt;</button>
+        <button class="opt" data-i="1">&lt;</button>
+        <button class="opt" data-i="2">=</button>
+        <button class="opt" data-i="3">none</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">R3</span><span class="qtxt">In <b>5,294,038</b>, what digit is in the ten-thousands place?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">2</button>
+        <button class="opt" data-i="1">4</button>
+        <button class="opt" data-i="2">9</button>
+        <button class="opt" data-i="3">5</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><span></span><button class="btn next" data-go="s1">Begin mission II →</button></div>
+  </section>
+
+  <!-- S1 FACTOR FINDER -->
+  <section class="card" id="s1">
+    <h2><span class="emoji">🛰</span>II · Factor Finder</h2>
+    <div class="lead">A <b>factor</b> is a number that divides EVENLY into another number (no remainder). Factors come in <b>pairs</b> that multiply to the target. Example: factors of 12 are 1, 2, 3, 4, 6, 12 — because 1&times;12, 2&times;6, 3&times;4 all equal 12.</div>
+
+    <div class="example-box">FACTOR PAIRS OF 12
+      <span class="step">1 &times; 12 &nbsp; | &nbsp; 2 &times; 6 &nbsp; | &nbsp; 3 &times; 4</span>
+      <span class="step">All factors: 1, 2, 3, 4, 6, 12</span>
+    </div>
+
+    <h3>🛰 Mission: select EVERY factor of 18</h3>
+    <p style="color:#3B6CB7;font-weight:700">Click all numbers that divide evenly into 18, then press SCAN.</p>
+    <div class="ff-wrap">
+      <div class="ff-target">TARGET: 18 &nbsp; (factors: 1, 2, 3, 6, 9, 18)</div>
+      <div class="ff-grid" data-factors="1,2,3,6,9,18">
+        <div class="ffn" data-n="1">1</div>
+        <div class="ffn" data-n="2">2</div>
+        <div class="ffn" data-n="3">3</div>
+        <div class="ffn" data-n="4">4</div>
+        <div class="ffn" data-n="5">5</div>
+        <div class="ffn" data-n="6">6</div>
+        <div class="ffn" data-n="9">9</div>
+        <div class="ffn" data-n="12">12</div>
+        <div class="ffn" data-n="18">18</div>
+      </div>
+      <div class="ff-check"><button class="btn" data-scan="1">🔍 SCAN FOR FACTORS</button></div>
+      <div class="tool-msg" id="ffMsg">✦ ALL FACTORS LOCATED — instruments calibrated.</div>
+    </div>
+
+    <h3>Quick Check</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">Which is NOT a factor of 24?</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">6</button>
+        <button class="opt" data-i="1">8</button>
+        <button class="opt" data-i="2">12</button>
+        <button class="opt" data-i="3">9</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Which factor pair multiplies to <b>36</b>?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">5 &times; 7</button>
+        <button class="opt" data-i="1">4 &times; 9</button>
+        <button class="opt" data-i="2">6 &times; 7</button>
+        <button class="opt" data-i="3">8 &times; 5</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s0">← Back</button><button class="btn next" data-go="s2">Mission III →</button></div>
+  </section>
+
+  <!-- S2 MULTIPLE MAPPER -->
+  <section class="card" id="s2">
+    <h2><span class="emoji">🌌</span>III · Multiple Mapper</h2>
+    <div class="lead">A <b>multiple</b> is what you get when you multiply a number by 1, 2, 3, 4... Think of it as skip counting. Multiples of 5: 5, 10, 15, 20, 25... <b>Factors are FEW; multiples are INFINITE.</b></div>
+
+    <div class="example-box">MULTIPLES OF 4
+      <span class="step">4, 8, 12, 16, 20, 24, 28... (it never ends!)</span>
+    </div>
+
+    <h3>🌌 Sort: is each number a multiple of 6 or a multiple of 7?</h3>
+    <p style="color:#3B6CB7;font-weight:700">Click a number, then click the correct orbit.</p>
+    <div class="sort-pool" id="multPool">
+      <div class="sort-item" data-bin="6">12</div>
+      <div class="sort-item" data-bin="7">21</div>
+      <div class="sort-item" data-bin="6">30</div>
+      <div class="sort-item" data-bin="7">35</div>
+      <div class="sort-item" data-bin="6">48</div>
+      <div class="sort-item" data-bin="7">49</div>
+    </div>
+    <div class="sort-bins">
+      <div class="sbin" data-bin="6"><div class="bl">Multiples of 6</div><div class="holder"></div></div>
+      <div class="sbin" data-bin="7"><div class="bl">Multiples of 7</div><div class="holder"></div></div>
+    </div>
+    <div class="tool-msg" id="multMsg">✦ ALL ORBITS MAPPED — excellent navigation.</div>
+
+    <h3>Quick Check</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">Which number is a multiple of 8?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">18</button>
+        <button class="opt" data-i="1">28</button>
+        <button class="opt" data-i="2">48</button>
+        <button class="opt" data-i="3">52</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">The number 24 is a multiple of BOTH:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">3 and 8</button>
+        <button class="opt" data-i="1">5 and 7</button>
+        <button class="opt" data-i="2">7 and 9</button>
+        <button class="opt" data-i="3">5 and 6</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">What is the difference between a factor and a multiple of 10?</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">There is no difference</button>
+        <button class="opt" data-i="1">Factors are bigger</button>
+        <button class="opt" data-i="2">Multiples are always smaller</button>
+        <button class="opt" data-i="3">Factors divide INTO 10; multiples are 10 multiplied OUT</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s1">← Back</button><button class="btn next" data-go="s3">Mission IV →</button></div>
+  </section>
+
+  <!-- S3 PRIME SCANNER -->
+  <section class="card" id="s3">
+    <h2><span class="emoji">⭐</span>IV · Prime Scanner</h2>
+    <div class="lead">A <b>PRIME</b> number has exactly TWO factors: 1 and itself. A <b>COMPOSITE</b> number has MORE than two factors. Special case: <b>1 is neither</b> prime nor composite. The smallest prime is 2 — and it&rsquo;s the only EVEN prime!</div>
+
+    <div class="example-box">PRIME vs COMPOSITE
+      <span class="step">7 is PRIME — only 1 &times; 7</span>
+      <span class="step">9 is COMPOSITE — 1 &times; 9 AND 3 &times; 3</span>
+    </div>
+
+    <h3>⭐ Scan: sort each number as PRIME or COMPOSITE</h3>
+    <p style="color:#3B6CB7;font-weight:700">Click a number, then click its classification.</p>
+    <div class="sort-pool" id="primePool">
+      <div class="sort-item" data-bin="prime">2</div>
+      <div class="sort-item" data-bin="comp">15</div>
+      <div class="sort-item" data-bin="prime">11</div>
+      <div class="sort-item" data-bin="comp">20</div>
+      <div class="sort-item" data-bin="prime">13</div>
+      <div class="sort-item" data-bin="comp">9</div>
+      <div class="sort-item" data-bin="prime">17</div>
+      <div class="sort-item" data-bin="comp">25</div>
+    </div>
+    <div class="sort-bins">
+      <div class="sbin" data-bin="prime"><div class="bl">PRIME (2 factors)</div><div class="holder"></div></div>
+      <div class="sbin" data-bin="comp"><div class="bl">COMPOSITE (more than 2)</div><div class="holder"></div></div>
+    </div>
+    <div class="tool-msg" id="primeMsg">✦ DEEP SCAN COMPLETE — every star classified.</div>
+
+    <h3>Quick Check</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">Which number is PRIME?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">21</button>
+        <button class="opt" data-i="1">27</button>
+        <button class="opt" data-i="2">23</button>
+        <button class="opt" data-i="3">33</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Why is 1 NEITHER prime nor composite?</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">It has only ONE factor (itself)</button>
+        <button class="opt" data-i="1">It is too small</button>
+        <button class="opt" data-i="2">It is an odd number</button>
+        <button class="opt" data-i="3">It has three factors</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">Which is the ONLY even prime number?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">4</button>
+        <button class="opt" data-i="1">2</button>
+        <button class="opt" data-i="2">6</button>
+        <button class="opt" data-i="3">8</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s2">← Back</button><button class="btn next" data-go="s4">Mission V →</button></div>
+  </section>
+
+  <!-- S4 FACTOR TREES -->
+  <section class="card" id="s4">
+    <h2><span class="emoji">🌳</span>V · Factor Trees</h2>
+    <div class="lead">A <b>factor tree</b> breaks a number down into its <b>prime factors</b> — the prime building blocks that multiply to make it. Keep splitting until every branch ends in a prime!</div>
+
+    <h3>🌳 Watch the tree grow — click STEP to break down 36</h3>
+    <div class="tree-wrap">
+      <div class="tree-row"><span class="tree-node">36</span></div>
+      <div class="tree-step" id="ts1">
+        <div class="tree-row"><span class="tree-branch">╱</span><span class="tree-branch">╲</span></div>
+        <div class="tree-row"><span class="tree-node">6</span><span class="tree-node">6</span></div>
+        <p style="margin-top:6px">36 splits into 6 &times; 6. Neither 6 is prime — keep going!</p>
+      </div>
+      <div class="tree-step" id="ts2">
+        <div class="tree-row"><span class="tree-node prime">2</span><span class="tree-node prime">3</span><span class="tree-node prime">2</span><span class="tree-node prime">3</span></div>
+        <p style="margin-top:6px">Each 6 splits into 2 &times; 3. All four are PRIME — the tree is done!</p>
+      </div>
+      <div class="tree-step" id="ts3">
+        <div class="example-box" style="margin:6px 0">36 = 2 &times; 2 &times; 3 &times; 3
+          <span class="step">The prime factorization of 36!</span>
+        </div>
+      </div>
+      <button class="btn" data-tree="1" style="margin-top:12px">▶ NEXT STEP</button>
+    </div>
+
+    <h3>Quick Check</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">The prime factors of <b>12</b> are:</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">3 &times; 4</button>
+        <button class="opt" data-i="1">2 &times; 2 &times; 3</button>
+        <button class="opt" data-i="2">1 &times; 12</button>
+        <button class="opt" data-i="3">6 &times; 2</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">In a factor tree, you stop splitting a branch when the number is:</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">even</button>
+        <button class="opt" data-i="1">bigger than 10</button>
+        <button class="opt" data-i="2">prime</button>
+        <button class="opt" data-i="3">odd</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">The prime factorization of <b>20</b> is:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">2 &times; 2 &times; 5</button>
+        <button class="opt" data-i="1">4 &times; 5</button>
+        <button class="opt" data-i="2">2 &times; 10</button>
+        <button class="opt" data-i="3">2 &times; 2 &times; 2 &times; 5</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s3">← Back</button><button class="btn next" data-go="s5">Final Mission →</button></div>
+  </section>
+
+  <!-- S5 COSMIC CHALLENGE -->
+  <section class="card" id="s5">
+    <h2><span class="emoji">🏆</span>VI · Cosmic Challenge</h2>
+    <div class="lead">Lead Astronomer Bailey — the Observatory&rsquo;s hardest readings await. Think in steps.</div>
+
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">How many factors does <b>16</b> have? (1, 2, 4, 8, 16)</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">3</button>
+        <button class="opt" data-i="1">4</button>
+        <button class="opt" data-i="2">5</button>
+        <button class="opt" data-i="3">6</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Which number is a multiple of 9 AND a multiple of 4?</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">18</button>
+        <button class="opt" data-i="1">27</button>
+        <button class="opt" data-i="2">32</button>
+        <button class="opt" data-i="3">36</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">A farm has 48 eggs. Bailey wants to pack them in equal rows with NO leftovers. Which row size will NOT work?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">6</button>
+        <button class="opt" data-i="1">7</button>
+        <button class="opt" data-i="2">8</button>
+        <button class="opt" data-i="3">12</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q4</span><span class="qtxt">Which list contains ONLY prime numbers?</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">2, 3, 5, 7, 11</button>
+        <button class="opt" data-i="1">2, 4, 6, 8</button>
+        <button class="opt" data-i="2">3, 5, 9, 11</button>
+        <button class="opt" data-i="3">1, 2, 3, 5</button>
+      </div><div class="fb"></div></div>
+
+    <div class="brain">
+      <div class="bt">🧠 BRAIN BUSTER — Astronomer's Riddle</div>
+      <div class="q" style="margin:0"><span class="qnum">B1</span><span class="qtxt">I am a number between 20 and 30. I am PRIME. The sum of my digits is 5. Who am I?</span>
+        <div class="opts" data-correct="2">
+          <button class="opt" data-i="0">25</button>
+          <button class="opt" data-i="1">21</button>
+          <button class="opt" data-i="2">23</button>
+          <button class="opt" data-i="3">27</button>
+        </div><div class="fb"></div></div>
+    </div>
+
+    <div class="brain">
+      <div class="bt">🧠 BRAIN BUSTER — Deep Space Logic</div>
+      <div class="q" style="margin:0"><span class="qnum">B2</span><span class="qtxt">Bailey packs eggs into cartons. 24 eggs fit perfectly into cartons of 1, 2, 3, 4, 6, 8, 12, or 24. These numbers are all the ___ of 24.</span>
+        <div class="opts" data-correct="1">
+          <button class="opt" data-i="0">multiples</button>
+          <button class="opt" data-i="1">factors</button>
+          <button class="opt" data-i="2">primes</button>
+          <button class="opt" data-i="3">digits</button>
+        </div><div class="fb"></div></div>
+    </div>
+
+    <div class="victory" id="vic">
+      <h2>MISSION COMPLETE — OBSERVATORY SECURED</h2>
+      <div class="crown">🛰 🔭 🛰</div>
+      <p style="font-size:18px;font-weight:800;color:#FFE9A8;font-family:'Orbitron';letter-spacing:2px">ASTRONOMER SCORE: <span id="finalScore">0</span> / 8</p>
+      <div class="quote">
+        "Somewhere, something incredible is waiting to be known."
+        <span class="who">— CARL SAGAN</span>
+      </div>
+      <p style="margin-top:10px;font-size:13px;color:#E8ECF5">Lead Astronomer Bailey — you mapped the hidden structure of numbers. The Observatory is yours. ✦</p>
+    </div>
+
+    <div class="nav-row"><button class="btn" data-go="s4">← Back</button><span></span></div>
+  </section>
+</main>
+
+<footer class="kce">
+  <div class="gradelvl">GRADE 4 • MATH • PRIME NUMBER OBSERVATORY (WEEK 2b)</div>
+  <div>KINGCRETOT EXPERIENCE © 2026</div>
+  <div class="contact">914.809.0112 • KCE@KINGCRETOT.COM</div>
+</footer>
+<div id="confetti"></div>
+
+<script>
+(function(){
+  'use strict';
+  const state={xp:0,coin:0,lvl:1,done:new Set(),score:0};
+  let ac=null,treeStep=0;
+  function ctx(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}return ac;}
+  function tone(f,d,t,g){const c=ctx();if(!c)return;const o=c.createOscillator(),gn=c.createGain();o.type=t||'sine';o.frequency.value=f;gn.gain.setValueAtTime(0,c.currentTime);gn.gain.linearRampToValueAtTime(g||0.16,c.currentTime+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+(d||0.18));o.connect(gn);gn.connect(c.destination);o.start();o.stop(c.currentTime+(d||0.18));}
+  function sndOk(){tone(440,0.1,'square',0.12);setTimeout(function(){tone(660,0.12,'square',0.12);},90);setTimeout(function(){tone(880,0.16,'square',0.12);},180);}
+  function sndNo(){tone(160,0.18,'sawtooth',0.13);setTimeout(function(){tone(110,0.22,'sawtooth',0.13);},150);}
+  function sndLvl(){[523,659,784,1047,1319].forEach(function(f,i){setTimeout(function(){tone(f,0.15,'square',0.16);},i*80);});}
+  function hud(){document.getElementById('hudXp').textContent=state.xp;document.getElementById('hudCoin').textContent=state.coin;document.getElementById('hudLvl').textContent=state.lvl;const n=state.lvl*100,c=state.xp%n;document.getElementById('hudBar').style.width=Math.min(100,(c/n)*100)+'%';}
+  function addXp(n){state.xp+=n;state.coin+=Math.floor(n/5);if(state.xp>=state.lvl*100){state.lvl++;sndLvl();state.xp=0;}hud();}
+  function confetti(n){n=n||40;const b=document.getElementById('confetti'),cs=['#E0AC3C','#FFE9A8','#3B6CB7','#5FB3B3','#1B2C5C'];for(let i=0;i<n;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.top='-20px';p.style.background=cs[Math.floor(Math.random()*cs.length)];p.style.transform='rotate('+Math.random()*360+'deg)';p.style.animation='fall '+(1.6+Math.random()*1.6)+'s ease-in forwards';p.style.borderRadius=Math.random()>0.5?'50%':'1px';b.appendChild(p);setTimeout(function(){p.remove();},3400);}}
+  const tabs=document.querySelectorAll('.tab'),cards=document.querySelectorAll('.card'),dots=document.querySelectorAll('.dot');
+  function goto(id){cards.forEach(function(c){c.classList.remove('active');});const el=document.getElementById(id);if(el)el.classList.add('active');tabs.forEach(function(t){t.classList.remove('active');});const tb=document.querySelector('.tab[data-go="'+id+'"]');if(tb)tb.classList.add('active');const idx=Array.prototype.indexOf.call(tabs,tb);dots.forEach(function(d,j){d.classList.remove('cur','done');if(j<idx)d.classList.add('done');if(j===idx)d.classList.add('cur');});window.scrollTo({top:0,behavior:'smooth'});}
+  function markDone(id){if(state.done.has(id))return;state.done.add(id);const tb=document.querySelector('.tab[data-go="'+id+'"]');if(tb)tb.classList.add('done');}
+  function praise(){const a=['Stellar!','Calibrated!','Cosmic precision!','Brilliant reading!','On target!','Astronomer-grade!','Deep space genius!'];return a[Math.floor(Math.random()*a.length)];}
+
+  let selItem=null;
+  document.addEventListener('click',function(e){
+    const go=e.target.closest('[data-go]');if(go){goto(go.getAttribute('data-go'));return;}
+
+    // FACTOR FINDER pick
+    const ffn=e.target.closest('.ffn');
+    if(ffn&&!ffn.classList.contains('correct')){ffn.classList.toggle('picked');return;}
+    // FACTOR FINDER scan
+    const scan=e.target.closest('[data-scan]');
+    if(scan){
+      const grid=scan.closest('.ff-wrap').querySelector('.ff-grid');
+      const want=grid.getAttribute('data-factors').split(',');
+      let allOk=true;
+      grid.querySelectorAll('.ffn').forEach(function(n){
+        const isF=want.indexOf(n.getAttribute('data-n'))>=0,picked=n.classList.contains('picked');
+        if(isF&&picked){n.classList.add('correct');n.classList.remove('picked');}
+        else if(isF&&!picked){allOk=false;}
+        else if(!isF&&picked){n.classList.add('wrong');allOk=false;setTimeout(function(){n.classList.remove('wrong','picked');},600);}
+      });
+      if(allOk){document.getElementById('ffMsg').classList.add('win');sndOk();confetti(30);addXp(24);}
+      else{sndNo();addXp(4);}
+      return;
+    }
+
+    // FACTOR TREE step
+    const tr=e.target.closest('[data-tree]');
+    if(tr){treeStep++;const ts=document.getElementById('ts'+treeStep);
+      if(ts){ts.classList.add('show');sndOk();confetti(14);addXp(8);}
+      if(treeStep>=3){tr.textContent='✓ TREE COMPLETE';tr.disabled=true;tr.style.opacity='.6';}
+      return;
+    }
+
+    // SORTING
+    const si=e.target.closest('.sort-pool .sort-item');
+    if(si&&!si.classList.contains('used')){
+      if(selItem===si){si.classList.remove('sel');selItem=null;}
+      else{if(selItem)selItem.classList.remove('sel');selItem=si;si.classList.add('sel');}
+      return;
+    }
+    const bin=e.target.closest('.sbin');
+    if(bin&&selItem){
+      const want=selItem.getAttribute('data-bin'),got=bin.getAttribute('data-bin');
+      const holder=bin.querySelector('.holder');const chip=document.createElement('span');
+      chip.className='chip';chip.textContent=selItem.textContent;
+      if(want===got){selItem.classList.add('used');selItem.style.display='none';holder.appendChild(chip);sndOk();confetti(12);addXp(10);
+        const pool=document.getElementById(bin.closest('.card').querySelector('.sort-pool').id);
+        const left=pool.querySelectorAll('.sort-item:not(.used)');
+        if(left.length===0){const mm=document.getElementById(pool.id.replace('Pool','Msg'));if(mm)mm.classList.add('win');}
+      }else{chip.classList.add('bad');holder.appendChild(chip);sndNo();setTimeout(function(){chip.remove();},700);}
+      selItem.classList.remove('sel');selItem=null;
+      return;
+    }
+
+    // MC
+    const opt=e.target.closest('.opt');
+    if(opt&&!opt.disabled){
+      const w=opt.parentElement,corr=parseInt(w.getAttribute('data-correct'),10),chosen=parseInt(opt.getAttribute('data-i'),10),fb=w.parentElement.querySelector('.fb'),all=w.querySelectorAll('.opt');
+      all.forEach(function(o){o.disabled=true;});
+      if(chosen===corr){opt.classList.add('correct');fb.className='fb ok';fb.textContent='✓ '+praise();sndOk();confetti(20);addXp(14);}
+      else{opt.classList.add('wrong');all[corr].classList.add('correct');fb.className='fb no';fb.textContent='Recalibrate — the answer is '+all[corr].textContent.trim()+'.';sndNo();addXp(3);}
+      const c=opt.closest('.card');
+      if(c&&c.id==='s5'){state.score=document.querySelectorAll('#s5 .opt.correct').length;}
+      checkSec(c);
+      return;
+    }
+  });
+  function checkSec(c){if(!c)return;const ops=c.querySelectorAll('.opts');let ans=0;ops.forEach(function(o){if(o.querySelector('.opt[disabled]'))ans++;});if(c.id==='s5'){if(ans>=8)showVic();}else if(ans>=ops.length&&ops.length>0)markDone(c.id);}
+  function showVic(){markDone('s5');document.getElementById('finalScore').textContent=state.score;const v=document.getElementById('vic');v.classList.add('show');sndLvl();confetti(120);setTimeout(function(){confetti(80);},600);v.scrollIntoView({behavior:'smooth',block:'center'});}
+  hud();
+})();
+</script>
+</body></html>

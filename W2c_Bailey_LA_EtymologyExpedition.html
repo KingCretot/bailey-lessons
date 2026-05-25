@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>KCE Summer 2026 • Bailey • LA 2c • Etymology Expedition</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:'Inter',sans-serif;font-size:18px;background:linear-gradient(165deg,#2E2415 0%,#1A130A 55%,#0E0A05 100%);color:#E8DDC4;min-height:100vh}
+body{padding-bottom:60px}
+header.kce{background:linear-gradient(90deg,#1B2C5C,#0B1F4A);color:#fff;padding:14px 24px;border-bottom:5px solid #E0AC3C;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:50;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+header.kce .brand{font-family:'Cinzel',serif;font-size:20px;letter-spacing:2px;font-weight:800}
+header.kce .brand small{display:block;font-size:11px;color:#E0AC3C;letter-spacing:2px;margin-top:2px;font-family:'Inter'}
+.hud{display:flex;gap:12px;align-items:center;font-weight:800}
+.hud .pill{background:rgba(224,172,60,.1);border:1px solid #E0AC3C;border-radius:6px;padding:6px 12px;font-size:14px;color:#fff;display:flex;gap:6px;font-family:'Cinzel',serif;letter-spacing:1px}
+.hud .pill .v{color:#FFE9A8;min-width:22px;text-align:right}
+.xpbar{height:6px;background:rgba(255,255,255,.12);border-radius:3px;width:110px;overflow:hidden;border:1px solid #5A3E1C}
+.xpbar .fill{height:100%;width:0%;background:linear-gradient(90deg,#E0AC3C,#FFE9A8);transition:width .6s;box-shadow:0 0 8px #E0AC3C}
+main{max-width:1080px;margin:24px auto;padding:0 20px}
+.title-card{background:linear-gradient(135deg,rgba(90,62,28,.4),rgba(26,15,8,.6));border-radius:14px;padding:30px 26px;text-align:center;border:2px solid #E0AC3C;position:relative;overflow:hidden;box-shadow:0 0 30px rgba(224,172,60,.2)}
+.title-card::before{content:"🗺";position:absolute;top:-14px;left:-10px;font-size:130px;opacity:.07;transform:rotate(-12deg)}
+.title-card::after{content:"🧭";position:absolute;bottom:-22px;right:-10px;font-size:130px;opacity:.07;transform:rotate(12deg)}
+.title-card h1{font-family:'Cinzel',serif;font-size:30px;color:#FFE9A8;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(224,172,60,.4)}
+.title-card .sub{font-size:15px;color:#E0AC3C;font-weight:800;margin-bottom:6px;letter-spacing:1px}
+.title-card .stand{display:inline-block;background:rgba(224,172,60,.1);color:#FFE9A8;padding:6px 14px;border-radius:4px;font-size:11px;font-weight:700;margin-top:10px;border:1px solid #E0AC3C}
+.badge{display:inline-block;background:#E0AC3C;color:#1A130A;font-family:'Cinzel',serif;font-size:11px;padding:5px 14px;border-radius:4px;margin-top:8px;letter-spacing:1px;font-weight:800}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:20px 0 14px;justify-content:center}
+.tab{background:rgba(90,62,28,.4);border:1px solid #8B6B3C;color:#E8DDC4;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;padding:10px 14px;border-radius:4px;cursor:pointer;transition:.2s}
+.tab:hover{border-color:#E0AC3C;background:rgba(224,172,60,.12)}
+.tab.active{background:#E0AC3C;color:#1A130A;border-color:#E0AC3C;box-shadow:0 0 12px rgba(224,172,60,.4)}
+.tab.done{background:#5A3E1C;color:#FFE9A8;border-color:#C99A2E}
+.tab.done::before{content:"✦ "}
+.card{background:linear-gradient(135deg,rgba(46,36,21,.6),rgba(26,15,8,.4));border-radius:14px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.5);margin-bottom:22px;border:1px solid #5A3E1C;display:none}
+.card.active{display:block;animation:fadeUp .5s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card h2{font-family:'Cinzel',serif;color:#FFE9A8;font-size:22px;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.card h2 .emoji{font-size:28px}
+.card .lead{font-size:16px;color:#E8DDC4;margin-bottom:18px;background:rgba(139,107,60,.15);border-left:4px solid #8B6B3C;padding:14px 16px;border-radius:4px;line-height:1.6}
+.card .lead b{color:#FFE9A8}
+.card h3{font-family:'Cinzel',serif;color:#C99A2E;font-size:16px;margin:20px 0 10px;letter-spacing:1px}
+.review-banner{background:linear-gradient(135deg,rgba(224,172,60,.18),rgba(139,107,60,.18));border:1px dashed #E0AC3C;border-radius:8px;padding:14px 16px;margin:10px 0;color:#E8DDC4;line-height:1.6}
+.review-banner .l{font-family:'Cinzel',serif;font-size:13px;letter-spacing:1.5px;color:#FFE9A8;display:block;margin-bottom:6px}
+.review-banner b{color:#FFE9A8}
+.scroll-box{background:rgba(0,0,0,.35);border:1px solid #8B6B3C;border-radius:8px;padding:16px;margin:14px 0;line-height:1.6}
+.scroll-box .st{font-family:'Cinzel',serif;color:#FFE9A8;font-size:15px;margin-bottom:8px;letter-spacing:1px}
+/* ROOT MATCH */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:14px 0}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match-col .ml{font-family:'Cinzel',serif;text-align:center;color:#C99A2E;font-size:13px;letter-spacing:1px}
+.mitem{background:rgba(46,36,21,.7);border:2px solid #8B6B3C;border-radius:6px;padding:12px;font-weight:700;color:#E8DDC4;cursor:pointer;transition:.15s;text-align:center;font-size:16px}
+.mitem:hover{border-color:#E0AC3C;background:rgba(224,172,60,.12)}
+.mitem.sel{border-color:#E0AC3C;background:rgba(224,172,60,.25);transform:scale(1.03)}
+.mitem.matched{background:#5A3E1C;color:#FFE9A8;border-color:#C99A2E;pointer-events:none}
+.mitem.wrong{background:#5A1818;border-color:#8B2E2E}
+/* WORD EXCAVATION */
+.dig-wrap{background:rgba(0,0,0,.35);border:1px solid #E0AC3C;border-radius:8px;padding:18px;margin:14px 0}
+.dig-word{font-family:'Cinzel',serif;font-size:26px;color:#FFE9A8;text-align:center;letter-spacing:1px;margin-bottom:14px}
+.dig-parts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.dig-slot{background:rgba(46,36,21,.6);border:2px dashed #8B6B3C;border-radius:6px;padding:14px 18px;min-width:110px;text-align:center}
+.dig-slot .sl{font-family:'Cinzel',serif;font-size:11px;color:#C99A2E;letter-spacing:1px;display:block;margin-bottom:6px}
+.dig-slot .sv{font-size:18px;font-weight:800;color:#5A3E1C}
+.dig-slot.filled{border-style:solid;border-color:#5FB3B3}
+.dig-slot.filled .sv{color:#FFE9A8}
+.dig-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.dig-piece{background:rgba(46,36,21,.7);border:2px solid #8B6B3C;border-radius:6px;padding:8px 14px;font-weight:800;color:#E8DDC4;cursor:pointer;transition:.15s;font-size:16px}
+.dig-piece:hover{border-color:#E0AC3C;transform:scale(1.06)}
+.dig-piece.sel{border-color:#E0AC3C;background:rgba(224,172,60,.25)}
+.dig-piece.used{opacity:.3;pointer-events:none}
+/* GRADIENT / SHADES */
+.grad-wrap{background:rgba(0,0,0,.3);border:1px solid #8B6B3C;border-radius:8px;padding:18px;margin:14px 0}
+.grad-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px}
+.grad-word{background:rgba(46,36,21,.7);border:2px solid #8B6B3C;border-radius:6px;padding:10px 16px;font-weight:800;color:#E8DDC4;cursor:pointer;transition:.15s;font-size:16px}
+.grad-word:hover{border-color:#E0AC3C;transform:scale(1.05)}
+.grad-word.used{opacity:.3;pointer-events:none}
+.grad-track{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap}
+.grad-slot{border:2px dashed #8B6B3C;border-radius:6px;min-width:96px;min-height:46px;display:flex;align-items:center;justify-content:center;font-weight:800;color:#FFE9A8;font-size:15px}
+.grad-slot.filled{border-style:solid;border-color:#5FB3B3;background:rgba(95,179,179,.12)}
+.grad-arrow{color:#C99A2E;font-size:20px}
+/* SENTENCE COMBINE */
+.combine-box{background:rgba(0,0,0,.3);border:1px solid #8B6B3C;border-radius:8px;padding:16px;margin:14px 0}
+.combine-box .src{background:rgba(46,36,21,.5);border-radius:4px;padding:8px 12px;margin:6px 0;font-size:15px;color:#E8DDC4}
+.q{background:rgba(0,0,0,.25);border:1px solid #8B6B3C;border-radius:8px;padding:18px;margin:14px 0;border-left:4px solid #E0AC3C}
+.q .qnum{display:inline-block;background:#E0AC3C;color:#1A130A;font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;padding:4px 10px;border-radius:3px;margin-right:8px;font-weight:800}
+.q .qtxt{font-size:17px;font-weight:600;color:#FFE9A8;margin:6px 0 12px;display:inline}
+.q .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.q .opt{background:rgba(46,36,21,.6);border:1px solid #8B6B3C;border-radius:6px;padding:12px 14px;font-size:16px;font-weight:600;cursor:pointer;transition:.2s;text-align:left;color:#E8DDC4}
+.q .opt:hover{border-color:#E0AC3C;background:rgba(224,172,60,.1)}
+.q .opt.correct{background:#5A3E1C;color:#FFE9A8;border-color:#5FB3B3;animation:hit .5s}
+.q .opt.wrong{background:#5A1818;color:#FFCDD2;border-color:#8B2E2E;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes hit{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+.q .fb{margin-top:10px;padding:10px 14px;border-radius:6px;display:none;font-weight:700;font-size:14px;line-height:1.5}
+.q .fb.ok{background:rgba(95,179,179,.18);color:#5FB3B3;display:block;border:1px solid #5FB3B3}
+.q .fb.no{background:rgba(139,46,46,.2);color:#FFAEAE;display:block;border:1px dashed #8B2E2E}
+.brain{background:linear-gradient(135deg,rgba(139,46,46,.3),rgba(26,15,8,.5));border:2px solid #E0AC3C;border-radius:10px;padding:18px;margin:14px 0}
+.brain .bt{font-family:'Cinzel',serif;color:#FFE9A8;font-size:15px;margin-bottom:8px;letter-spacing:1px}
+.write-box{background:rgba(139,107,60,.12);border:1px solid #8B6B3C;border-radius:8px;padding:16px;margin:12px 0}
+.write-box .wt{font-family:'Cinzel',serif;color:#FFE9A8;font-size:14px;margin-bottom:8px;letter-spacing:1px}
+.write-box textarea{width:100%;border:1px solid #8B6B3C;border-radius:6px;padding:10px;font-family:'Inter';font-size:15px;resize:vertical;min-height:74px;background:rgba(0,0,0,.3);color:#E8DDC4}
+.btn{background:linear-gradient(135deg,#E0AC3C,#C99A2E);color:#1A130A;font-family:'Cinzel',serif;font-size:13px;padding:11px 22px;border:none;border-radius:4px;cursor:pointer;letter-spacing:1.5px;font-weight:800;transition:.15s}
+.btn:hover{box-shadow:0 0 16px rgba(224,172,60,.6);transform:translateY(-1px)}
+.btn.next{background:linear-gradient(135deg,#5A3E1C,#3A2810);color:#FFE9A8}
+.btn.ghost{background:transparent;color:#E0AC3C;border:1px solid #E0AC3C}
+.nav-row{display:flex;justify-content:space-between;margin-top:18px;gap:10px}
+.tool-msg{text-align:center;font-family:'Cinzel',serif;font-size:14px;padding:10px;border-radius:6px;margin:10px 0;display:none;letter-spacing:1px}
+.tool-msg.win{background:rgba(95,179,179,.18);color:#5FB3B3;display:block;border:1px solid #5FB3B3;animation:hit .5s}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:200}
+.confetti-piece{position:absolute;width:8px;height:12px;opacity:.9}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+footer.kce{position:fixed;bottom:0;left:0;right:0;background:#0B1F4A;color:#E8DDC4;padding:8px 24px;border-top:3px solid #E0AC3C;font-size:11px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;z-index:40;font-family:'Cinzel',serif;letter-spacing:1px}
+footer.kce .gradelvl{color:#E0AC3C}
+footer.kce .contact{color:#FFE9A8;text-align:right}
+.victory{display:none;background:linear-gradient(135deg,rgba(224,172,60,.2),rgba(26,15,8,.6));border:2px solid #E0AC3C;border-radius:14px;padding:32px;text-align:center;margin:18px 0;box-shadow:0 0 40px rgba(224,172,60,.4)}
+.victory.show{display:block;animation:fadeUp .6s}
+.victory h2{font-family:'Cinzel',serif;color:#FFE9A8;font-size:23px;letter-spacing:2px;margin-bottom:10px;text-shadow:0 0 12px rgba(224,172,60,.6)}
+.victory .crown{font-size:52px;margin:8px 0;letter-spacing:6px}
+.victory .quote{background:rgba(0,0,0,.4);border-radius:6px;padding:18px;margin-top:14px;color:#E8DDC4;font-size:14px;font-style:italic;border-left:3px solid #E0AC3C}
+.victory .quote .who{display:block;font-style:normal;font-weight:800;color:#E0AC3C;margin-top:8px;font-family:'Cinzel',serif;letter-spacing:1px}
+.progress-dots{display:flex;justify-content:center;gap:6px;margin:14px 0}
+.dot{width:11px;height:11px;border-radius:50%;background:rgba(90,62,28,.6);border:1px solid #8B6B3C;transition:.3s}
+.dot.done{background:#E0AC3C;border-color:#FFE9A8}
+.dot.cur{background:#8B6B3C;border-color:#E0AC3C;box-shadow:0 0 8px #8B6B3C;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+@media(max-width:680px){.title-card h1{font-size:20px}.q .opts{grid-template-columns:1fr}.match-wrap{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="kce">
+  <div class="brand">KCE 🗺 ETYMOLOGY EXPEDITION<small>SUMMER 2026 • WEEK 2c LA</small></div>
+  <div class="hud">
+    <div class="pill">✦ <span class="v" id="hudXp">0</span></div>
+    <div class="pill">🗝 <span class="v" id="hudCoin">0</span></div>
+    <div class="pill">LVL <span class="v" id="hudLvl">1</span></div>
+    <div class="xpbar"><div class="fill" id="hudBar"></div></div>
+  </div>
+</header>
+
+<main>
+  <div class="title-card">
+    <h1>🗺 ETYMOLOGY EXPEDITION 🧭</h1>
+    <div class="sub">BAILEY • GRADE 4 • WEEK 2c • EXTENSION EXPEDITION</div>
+    <p style="color:#E8DDC4;font-size:15px;margin-top:6px">Excavate ancient word-roots and unlock the hidden meaning inside any word.</p>
+    <span class="badge">★ CHALLENGE LEVEL: MASTER ETYMOLOGIST</span><br>
+    <span class="stand">Florida B.E.S.T.: ELA.4.V.1.2 • ELA.4.V.1.3 • ELA.4.F.1.3 • ELA.4.C.3.1</span>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-go="s0">I · Expedition Log</button>
+    <button class="tab" data-go="s1">II · Root Discovery</button>
+    <button class="tab" data-go="s2">III · Word Excavation</button>
+    <button class="tab" data-go="s3">IV · Shades of Meaning</button>
+    <button class="tab" data-go="s4">V · Sentence Architect</button>
+    <button class="tab" data-go="s5">VI · Master Etymologist</button>
+  </div>
+
+  <div class="progress-dots" id="dots">
+    <div class="dot cur"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+  </div>
+
+  <!-- S0 LOG -->
+  <section class="card active" id="s0">
+    <h2><span class="emoji">📜</span>I · Expedition Log</h2>
+    <div class="review-banner">
+      <span class="l">PRIOR EXPEDITION — ROYAL LIBRARY</span>
+      In the <b>Royal Library</b> you mastered <b>prefixes</b> (un-, re-, pre-, dis-), <b>suffixes</b> (-ful, -less, -er), and <b>root words</b>. Today&rsquo;s expedition goes DEEPER — into the ancient Greek and Latin roots that built half the English language. Check your gear below.
+    </div>
+
+    <div class="q"><span class="qnum">R1</span><span class="qtxt">The prefix <b>re-</b> in "rebuild" means:</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">not</button>
+        <button class="opt" data-i="1">again</button>
+        <button class="opt" data-i="2">before</button>
+        <button class="opt" data-i="3">after</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">R2</span><span class="qtxt">The suffix <b>-less</b> in "fearless" means:</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">full of</button>
+        <button class="opt" data-i="1">again</button>
+        <button class="opt" data-i="2">more</button>
+        <button class="opt" data-i="3">without</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">R3</span><span class="qtxt">What is the root word of <b>"unkindness"</b>?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">un</button>
+        <button class="opt" data-i="1">ness</button>
+        <button class="opt" data-i="2">kind</button>
+        <button class="opt" data-i="3">unkind</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><span></span><button class="btn next" data-go="s1">Begin Expedition II →</button></div>
+  </section>
+
+  <!-- S1 ROOT DISCOVERY -->
+  <section class="card" id="s1">
+    <h2><span class="emoji">🏛</span>II · Root Discovery</h2>
+    <div class="lead">A <b>root</b> is the ancient core of a word — many come from <b>Greek</b> and <b>Latin</b>. Learn ONE root and you can unlock DOZENS of words. Example: the Latin root <b>port</b> means "carry" — so trans<b>port</b>, <b>port</b>able, and im<b>port</b> all involve carrying!</div>
+
+    <div class="scroll-box">
+      <div class="st">📖 EXPEDITION ROOT GLOSSARY</div>
+      <b>port</b> = carry &nbsp;&bull;&nbsp; <b>struct</b> = build &nbsp;&bull;&nbsp; <b>dict</b> = speak/say &nbsp;&bull;&nbsp; <b>spect</b> = look/see &nbsp;&bull;&nbsp; <b>scrib/script</b> = write &nbsp;&bull;&nbsp; <b>aqua</b> = water
+    </div>
+
+    <h3>🏛 Match each root to its meaning</h3>
+    <p style="color:#C99A2E;font-weight:700">Click a root on the left, then its meaning on the right.</p>
+    <div class="match-wrap" data-match="root">
+      <div class="match-col">
+        <div class="ml">ANCIENT ROOT</div>
+        <div class="mitem" data-k="a">struct</div>
+        <div class="mitem" data-k="b">dict</div>
+        <div class="mitem" data-k="c">spect</div>
+        <div class="mitem" data-k="d">aqua</div>
+      </div>
+      <div class="match-col">
+        <div class="ml">MEANING</div>
+        <div class="mitem" data-k="c">look / see</div>
+        <div class="mitem" data-k="a">build</div>
+        <div class="mitem" data-k="d">water</div>
+        <div class="mitem" data-k="b">speak / say</div>
+      </div>
+    </div>
+    <div class="tool-msg" id="rootMsg">✦ ALL ROOTS DECODED — the ancient glossary is yours.</div>
+
+    <h3>Apply the Roots</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">A <b>structure</b> is something that has been:</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">spoken</button>
+        <button class="opt" data-i="1">carried</button>
+        <button class="opt" data-i="2">built</button>
+        <button class="opt" data-i="3">erased</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">A <b>spectator</b> is a person who:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">watches / looks</button>
+        <button class="opt" data-i="1">writes</button>
+        <button class="opt" data-i="2">carries</button>
+        <button class="opt" data-i="3">builds</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">An <b>aquarium</b> must contain:</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">books</button>
+        <button class="opt" data-i="1">light</button>
+        <button class="opt" data-i="2">words</button>
+        <button class="opt" data-i="3">water</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s0">← Back</button><button class="btn next" data-go="s2">Expedition III →</button></div>
+  </section>
+
+  <!-- S2 WORD EXCAVATION -->
+  <section class="card" id="s2">
+    <h2><span class="emoji">⛏</span>III · Word Excavation</h2>
+    <div class="lead">A long word is like a buried artifact in layers. Carefully excavate it into <b>prefix + root + suffix</b>. When you know each part, you can figure out the WHOLE meaning — even for a word you&rsquo;ve never seen.</div>
+
+    <h3>⛏ Excavate the word: UNPREDICTABLE</h3>
+    <p style="color:#C99A2E;font-weight:700">Click a part below, then click the layer it belongs in.</p>
+    <div class="dig-wrap">
+      <div class="dig-word">UN &middot; PREDICT &middot; ABLE</div>
+      <div class="dig-parts">
+        <div class="dig-slot" data-slot="pre"><span class="sl">PREFIX</span><span class="sv">____</span></div>
+        <div class="dig-slot" data-slot="root"><span class="sl">ROOT</span><span class="sv">____</span></div>
+        <div class="dig-slot" data-slot="suf"><span class="sl">SUFFIX</span><span class="sv">____</span></div>
+      </div>
+      <div class="dig-pool">
+        <div class="dig-piece" data-belongs="root">predict</div>
+        <div class="dig-piece" data-belongs="suf">-able</div>
+        <div class="dig-piece" data-belongs="pre">un-</div>
+      </div>
+      <div class="tool-msg" id="digMsg">✦ ARTIFACT FULLY EXCAVATED! "Unpredictable" = not + able to be foretold.</div>
+    </div>
+
+    <h3>Excavation Logic</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">"Unpredictable" means:</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">easy to predict</button>
+        <button class="opt" data-i="1">not able to be predicted</button>
+        <button class="opt" data-i="2">predicted before</button>
+        <button class="opt" data-i="3">predicting again</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Excavate <b>"disrespectful"</b>. Its three parts are:</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">dis + spect + ful</button>
+        <button class="opt" data-i="1">disre + spect + ful</button>
+        <button class="opt" data-i="2">dis + respect + ful</button>
+        <button class="opt" data-i="3">dis + respectf + ul</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">If "port" means carry, a word meaning "able to be carried" is:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">portable</button>
+        <button class="opt" data-i="1">import</button>
+        <button class="opt" data-i="2">report</button>
+        <button class="opt" data-i="3">portion</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s1">← Back</button><button class="btn next" data-go="s3">Expedition IV →</button></div>
+  </section>
+
+  <!-- S3 SHADES OF MEANING -->
+  <section class="card" id="s3">
+    <h2><span class="emoji">🎨</span>IV · Shades of Meaning</h2>
+    <div class="lead">Synonyms are NOT identical — they have different <b>intensity</b>. "Warm," "hot," and "scorching" all describe heat, but they climb a ladder of strength. A master writer picks the EXACT shade.</div>
+
+    <h3>🎨 Build the intensity ladder — WEAKEST to STRONGEST</h3>
+    <p style="color:#C99A2E;font-weight:700">Click each word in order, from gentlest to most extreme.</p>
+    <div class="grad-wrap">
+      <div style="text-align:center;font-family:'Cinzel';color:#FFE9A8;margin-bottom:8px">Theme: being HAPPY</div>
+      <div class="grad-pool" id="gradPool" data-order="content,glad,joyful,ecstatic">
+        <div class="grad-word" data-v="ecstatic">ecstatic</div>
+        <div class="grad-word" data-v="content">content</div>
+        <div class="grad-word" data-v="joyful">joyful</div>
+        <div class="grad-word" data-v="glad">glad</div>
+      </div>
+      <div class="grad-track" id="gradTrack">
+        <span class="grad-slot" data-i="0"></span><span class="grad-arrow">→</span>
+        <span class="grad-slot" data-i="1"></span><span class="grad-arrow">→</span>
+        <span class="grad-slot" data-i="2"></span><span class="grad-arrow">→</span>
+        <span class="grad-slot" data-i="3"></span>
+      </div>
+      <button class="btn ghost" data-reset="grad" style="margin-top:10px">↺ Reset Ladder</button>
+      <div class="tool-msg" id="gradMsg">✦ PERFECT GRADIENT — weakest to strongest, exactly right.</div>
+    </div>
+
+    <h3>Pick the Precise Shade</h3>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">Which word shows the STRONGEST fear?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">nervous</button>
+        <button class="opt" data-i="1">worried</button>
+        <button class="opt" data-i="2">terrified</button>
+        <button class="opt" data-i="3">uneasy</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Which word shows the WEAKEST size?</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">small</button>
+        <button class="opt" data-i="1">tiny</button>
+        <button class="opt" data-i="2">miniscule</button>
+        <button class="opt" data-i="3">microscopic</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">"The hen was ___ after the fox finally left." Which word best fits a CALM, gentle feeling?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">furious</button>
+        <button class="opt" data-i="1">relieved</button>
+        <button class="opt" data-i="2">ecstatic</button>
+        <button class="opt" data-i="3">devastated</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s2">← Back</button><button class="btn next" data-go="s4">Expedition V →</button></div>
+  </section>
+
+  <!-- S4 SENTENCE ARCHITECT -->
+  <section class="card" id="s4">
+    <h2><span class="emoji">🏗</span>V · Sentence Architect</h2>
+    <div class="lead">Strong writers <b>combine</b> short choppy sentences into one smooth sentence. Joining words like <b>and, but, because, so, when, although</b> connect ideas. A <b>compound</b> sentence joins two complete ideas; a <b>complex</b> sentence adds a dependent idea.</div>
+
+    <div class="scroll-box">
+      <div class="st">📖 COMBINING EXAMPLE</div>
+      Choppy: "The fox was hungry. The hens were safe."<br>
+      Combined (compound): "The fox was hungry, <b>but</b> the hens were safe."<br>
+      Combined (complex): "<b>Although</b> the fox was hungry, the hens were safe."
+    </div>
+
+    <h3>Choose the BEST Combination</h3>
+    <div class="combine-box">
+      <div class="src">A: "Bailey fed the chickens."</div>
+      <div class="src">B: "The chickens were happy."</div>
+    </div>
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">Which combines A and B most smoothly?</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">Bailey fed the chickens the chickens were happy.</button>
+        <button class="opt" data-i="1">Bailey fed the chickens. Happy.</button>
+        <button class="opt" data-i="2">Bailey fed the chickens, so the chickens were happy.</button>
+        <button class="opt" data-i="3">Bailey fed but chickens happy.</button>
+      </div><div class="fb"></div></div>
+
+    <div class="combine-box">
+      <div class="src">A: "It started to rain."</div>
+      <div class="src">B: "The expedition continued."</div>
+    </div>
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Which uses a joining word to show CONTRAST?</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">It started to rain and the expedition continued.</button>
+        <button class="opt" data-i="1">Although it started to rain, the expedition continued.</button>
+        <button class="opt" data-i="2">It started to rain the expedition continued.</button>
+        <button class="opt" data-i="3">It started to rain so continued.</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">A <b>compound sentence</b> joins:</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">two words</button>
+        <button class="opt" data-i="1">a prefix and a root</button>
+        <button class="opt" data-i="2">two spelling mistakes</button>
+        <button class="opt" data-i="3">two complete sentences with a joining word</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q4</span><span class="qtxt">"We hurried home ___ it was getting dark." Best joining word:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">because</button>
+        <button class="opt" data-i="1">but</button>
+        <button class="opt" data-i="2">or</button>
+        <button class="opt" data-i="3">although</button>
+      </div><div class="fb"></div></div>
+
+    <div class="nav-row"><button class="btn" data-go="s3">← Back</button><button class="btn next" data-go="s5">Final Expedition →</button></div>
+  </section>
+
+  <!-- S5 MASTER -->
+  <section class="card" id="s5">
+    <h2><span class="emoji">🏆</span>VI · Master Etymologist</h2>
+    <div class="lead">Master Etymologist Bailey — the final artifacts await your expertise. Decode them all.</div>
+
+    <div class="q"><span class="qnum">Q1</span><span class="qtxt">The word <b>"inspect"</b> uses the root "spect." It means to:</span>
+      <div class="opts" data-correct="1">
+        <button class="opt" data-i="0">write carefully</button>
+        <button class="opt" data-i="1">look closely at</button>
+        <button class="opt" data-i="2">carry inward</button>
+        <button class="opt" data-i="3">speak loudly</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q2</span><span class="qtxt">Excavate <b>"reconstruction"</b>: re + ___ + ion. The root is:</span>
+      <div class="opts" data-correct="2">
+        <button class="opt" data-i="0">recon</button>
+        <button class="opt" data-i="1">construct-i</button>
+        <button class="opt" data-i="2">construct</button>
+        <button class="opt" data-i="3">struction</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q3</span><span class="qtxt">Order from WEAKEST to STRONGEST: tired, exhausted, sleepy. The strongest is:</span>
+      <div class="opts" data-correct="0">
+        <button class="opt" data-i="0">exhausted</button>
+        <button class="opt" data-i="1">tired</button>
+        <button class="opt" data-i="2">sleepy</button>
+        <button class="opt" data-i="3">they are equal</button>
+      </div><div class="fb"></div></div>
+
+    <div class="q"><span class="qnum">Q4</span><span class="qtxt">Which is a correctly combined COMPLEX sentence?</span>
+      <div class="opts" data-correct="3">
+        <button class="opt" data-i="0">The sun rose. The birds sang.</button>
+        <button class="opt" data-i="1">The sun rose the birds sang.</button>
+        <button class="opt" data-i="2">Sun birds sang rose.</button>
+        <button class="opt" data-i="3">When the sun rose, the birds sang.</button>
+      </div><div class="fb"></div></div>
+
+    <div class="brain">
+      <div class="bt">🧠 BRAIN BUSTER — The Unknown Word</div>
+      <div class="q" style="margin:0"><span class="qnum">B1</span><span class="qtxt">You&rsquo;ve never seen "aqueduct" before. "Aqua" = water, "duct" = lead/carry. An aqueduct most likely:</span>
+        <div class="opts" data-correct="1">
+          <button class="opt" data-i="0">writes about water</button>
+          <button class="opt" data-i="1">carries water from place to place</button>
+          <button class="opt" data-i="2">looks at water</button>
+          <button class="opt" data-i="3">builds boats</button>
+        </div><div class="fb"></div></div>
+    </div>
+
+    <div class="brain">
+      <div class="bt">🧠 BRAIN BUSTER — Etymologist's Deduction</div>
+      <div class="q" style="margin:0"><span class="qnum">B2</span><span class="qtxt">The root "dict" means speak. "Contradict" has the prefix "contra-" (against). To contradict someone is to:</span>
+        <div class="opts" data-correct="2">
+          <button class="opt" data-i="0">speak for them</button>
+          <button class="opt" data-i="1">write to them</button>
+          <button class="opt" data-i="2">speak against what they said</button>
+          <button class="opt" data-i="3">carry their message</button>
+        </div><div class="fb"></div></div>
+    </div>
+
+    <div class="write-box">
+      <div class="wt">✍ ETYMOLOGIST&rsquo;S FIELD NOTES (write on paper or below)</div>
+      <p style="color:#E8DDC4;font-weight:600;margin-bottom:8px">Pick ONE root (port, struct, dict, spect, scrib, aqua). Write TWO real words that use it, then write one complex sentence using a joining word (because, although, when).</p>
+      <textarea placeholder="Record your field notes here..."></textarea>
+    </div>
+
+    <div class="victory" id="vic">
+      <h2>EXPEDITION COMPLETE — ARTIFACTS RECOVERED</h2>
+      <div class="crown">🗝 🗺 🗝</div>
+      <p style="font-size:18px;font-weight:800;color:#FFE9A8;font-family:'Cinzel';letter-spacing:2px">ETYMOLOGIST SCORE: <span id="finalScore">0</span> / 8</p>
+      <div class="quote">
+        "The limits of my language mean the limits of my world."
+        <span class="who">— LUDWIG WITTGENSTEIN</span>
+      </div>
+      <p style="margin-top:10px;font-size:13px;color:#E8DDC4">Master Etymologist Bailey — you can now unlock any word in the language. Don&rsquo;t skip the field notes above! ✦</p>
+    </div>
+
+    <div class="nav-row"><button class="btn" data-go="s4">← Back</button><span></span></div>
+  </section>
+</main>
+
+<footer class="kce">
+  <div class="gradelvl">GRADE 4 • LANGUAGE ARTS • ETYMOLOGY EXPEDITION (WEEK 2c)</div>
+  <div>KINGCRETOT EXPERIENCE © 2026</div>
+  <div class="contact">914.809.0112 • KCE@KINGCRETOT.COM</div>
+</footer>
+<div id="confetti"></div>
+
+<script>
+(function(){
+  'use strict';
+  const state={xp:0,coin:0,lvl:1,done:new Set(),score:0};
+  let ac=null;
+  function ctx(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}return ac;}
+  function tone(f,d,t,g){const c=ctx();if(!c)return;const o=c.createOscillator(),gn=c.createGain();o.type=t||'sine';o.frequency.value=f;gn.gain.setValueAtTime(0,c.currentTime);gn.gain.linearRampToValueAtTime(g||0.16,c.currentTime+0.01);gn.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+(d||0.18));o.connect(gn);gn.connect(c.destination);o.start();o.stop(c.currentTime+(d||0.18));}
+  function sndOk(){tone(392,0.1,'triangle',0.13);setTimeout(function(){tone(523,0.12,'triangle',0.13);},90);setTimeout(function(){tone(659,0.16,'triangle',0.13);},180);}
+  function sndNo(){tone(180,0.18,'sawtooth',0.12);setTimeout(function(){tone(130,0.22,'sawtooth',0.12);},150);}
+  function sndLvl(){[392,523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,0.15,'triangle',0.16);},i*80);});}
+  function hud(){document.getElementById('hudXp').textContent=state.xp;document.getElementById('hudCoin').textContent=state.coin;document.getElementById('hudLvl').textContent=state.lvl;const n=state.lvl*100,c=state.xp%n;document.getElementById('hudBar').style.width=Math.min(100,(c/n)*100)+'%';}
+  function addXp(n){state.xp+=n;state.coin+=Math.floor(n/5);if(state.xp>=state.lvl*100){state.lvl++;sndLvl();state.xp=0;}hud();}
+  function confetti(n){n=n||40;const b=document.getElementById('confetti'),cs=['#E0AC3C','#FFE9A8','#8B6B3C','#5FB3B3','#5A3E1C'];for(let i=0;i<n;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.top='-20px';p.style.background=cs[Math.floor(Math.random()*cs.length)];p.style.transform='rotate('+Math.random()*360+'deg)';p.style.animation='fall '+(1.6+Math.random()*1.6)+'s ease-in forwards';p.style.borderRadius=Math.random()>0.5?'50%':'1px';b.appendChild(p);setTimeout(function(){p.remove();},3400);}}
+  const tabs=document.querySelectorAll('.tab'),cards=document.querySelectorAll('.card'),dots=document.querySelectorAll('.dot');
+  function goto(id){cards.forEach(function(c){c.classList.remove('active');});const el=document.getElementById(id);if(el)el.classList.add('active');tabs.forEach(function(t){t.classList.remove('active');});const tb=document.querySelector('.tab[data-go="'+id+'"]');if(tb)tb.classList.add('active');const idx=Array.prototype.indexOf.call(tabs,tb);dots.forEach(function(d,j){d.classList.remove('cur','done');if(j<idx)d.classList.add('done');if(j===idx)d.classList.add('cur');});window.scrollTo({top:0,behavior:'smooth'});}
+  function markDone(id){if(state.done.has(id))return;state.done.add(id);const tb=document.querySelector('.tab[data-go="'+id+'"]');if(tb)tb.classList.add('done');}
+  function praise(){const a=['Decoded!','Brilliant deduction!','Master work!','Artifact recovered!','Sharp etymology!','Expedition-grade!','Unlocked!'];return a[Math.floor(Math.random()*a.length)];}
+
+  const matchState={};let selItem=null;let digSel=null;const gradOrder=[];
+  document.addEventListener('click',function(e){
+    const go=e.target.closest('[data-go]');if(go){goto(go.getAttribute('data-go'));return;}
+
+    // ROOT MATCHING
+    const mi=e.target.closest('.mitem');
+    if(mi&&!mi.classList.contains('matched')){
+      const wrap=mi.closest('[data-match]');const key=wrap.getAttribute('data-match');
+      if(!matchState[key])matchState[key]={sel:null};
+      const st=matchState[key];
+      if(!st.sel){st.sel=mi;mi.classList.add('sel');}
+      else if(st.sel===mi){mi.classList.remove('sel');st.sel=null;}
+      else{
+        if(st.sel.getAttribute('data-k')===mi.getAttribute('data-k')&&st.sel.parentElement!==mi.parentElement){
+          st.sel.classList.add('matched');mi.classList.add('matched');st.sel.classList.remove('sel');st.sel=null;
+          sndOk();confetti(14);addXp(12);
+          const all=wrap.querySelectorAll('.mitem'),done=wrap.querySelectorAll('.mitem.matched');
+          if(all.length===done.length){document.getElementById('rootMsg').classList.add('win');}
+        }else{const bad=st.sel;bad.classList.add('wrong');mi.classList.add('wrong');sndNo();
+          setTimeout(function(){bad.classList.remove('wrong','sel');mi.classList.remove('wrong');},450);st.sel=null;}
+      }
+      return;
+    }
+
+    // WORD EXCAVATION
+    const dp=e.target.closest('.dig-piece');
+    if(dp&&!dp.classList.contains('used')){
+      if(digSel===dp){dp.classList.remove('sel');digSel=null;}
+      else{if(digSel)digSel.classList.remove('sel');digSel=dp;dp.classList.add('sel');}
+      return;
+    }
+    const ds=e.target.closest('.dig-slot');
+    if(ds&&digSel){
+      if(digSel.getAttribute('data-belongs')===ds.getAttribute('data-slot')){
+        ds.classList.add('filled');ds.querySelector('.sv').textContent=digSel.textContent;
+        digSel.classList.add('used');digSel.classList.remove('sel');digSel=null;
+        sndOk();confetti(12);addXp(12);
+        const w=ds.closest('.dig-wrap');
+        if(w.querySelectorAll('.dig-slot.filled').length===3){document.getElementById('digMsg').classList.add('win');}
+      }else{ds.classList.add('wrong');sndNo();setTimeout(function(){ds.classList.remove('wrong');},450);}
+      return;
+    }
+
+    // SHADES gradient
+    const gw=e.target.closest('#gradPool .grad-word');
+    if(gw&&!gw.classList.contains('used')){
+      gw.classList.add('used');gradOrder.push(gw.getAttribute('data-v'));
+      const slot=document.querySelector('#gradTrack .grad-slot[data-i="'+(gradOrder.length-1)+'"]');
+      if(slot){slot.textContent=gw.textContent;slot.classList.add('filled');}
+      addXp(4);
+      const target=document.getElementById('gradPool').getAttribute('data-order').split(',');
+      if(gradOrder.length===target.length){
+        const ok=gradOrder.every(function(v,i){return v===target[i];});
+        const msg=document.getElementById('gradMsg');
+        if(ok){msg.classList.add('win');sndOk();confetti(28);addXp(20);}
+        else{msg.textContent='Not the right order — reset and think gentlest to most extreme.';msg.style.display='block';msg.style.background='rgba(139,46,46,.2)';msg.style.color='#FFAEAE';sndNo();}
+      }
+      return;
+    }
+    const gr=e.target.closest('[data-reset="grad"]');
+    if(gr){gradOrder.length=0;document.querySelectorAll('#gradPool .grad-word').forEach(function(x){x.classList.remove('used');});
+      document.querySelectorAll('#gradTrack .grad-slot').forEach(function(s){s.textContent='';s.classList.remove('filled');});
+      const msg=document.getElementById('gradMsg');msg.classList.remove('win');msg.style.display='none';msg.textContent='✦ PERFECT GRADIENT — weakest to strongest, exactly right.';msg.style.background='';msg.style.color='';return;}
+
+    // MC
+    const opt=e.target.closest('.opt');
+    if(opt&&!opt.disabled){
+      const w=opt.parentElement,corr=parseInt(w.getAttribute('data-correct'),10),chosen=parseInt(opt.getAttribute('data-i'),10),fb=w.parentElement.querySelector('.fb'),all=w.querySelectorAll('.opt');
+      all.forEach(function(o){o.disabled=true;});
+      if(chosen===corr){opt.classList.add('correct');fb.className='fb ok';fb.textContent='✓ '+praise();sndOk();confetti(20);addXp(14);}
+      else{opt.classList.add('wrong');all[corr].classList.add('correct');fb.className='fb no';fb.textContent='Re-examine the roots — the answer is '+all[corr].textContent.trim()+'.';sndNo();addXp(3);}
+      const c=opt.closest('.card');
+      if(c&&c.id==='s5'){state.score=document.querySelectorAll('#s5 .opt.correct').length;}
+      checkSec(c);
+      return;
+    }
+  });
+  function checkSec(c){if(!c)return;const ops=c.querySelectorAll('.opts');let ans=0;ops.forEach(function(o){if(o.querySelector('.opt[disabled]'))ans++;});if(c.id==='s5'){if(ans>=8)showVic();}else if(ans>=ops.length&&ops.length>0)markDone(c.id);}
+  function showVic(){markDone('s5');document.getElementById('finalScore').textContent=state.score;const v=document.getElementById('vic');v.classList.add('show');sndLvl();confetti(120);setTimeout(function(){confetti(80);},600);v.scrollIntoView({behavior:'smooth',block:'center'});}
+  hud();
+})();
+</script>
+</body></html>
