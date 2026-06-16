@@ -421,7 +421,7 @@
   // Published scores live in the line below. Don't hand-edit it — the app
   // rewrites it for you when you click "Save updated file".
   /*SBEGIN*/
-  var INITIAL_DATA = {"current":1,"scores":{"1":{"bristol":{"ms":100,"ma":false,"mh":0,"ls":0,"la":false,"lh":0,"books":0},"bailey":{"ms":95,"ma":false,"mh":0,"ls":0,"la":false,"lh":0,"books":0}}}};
+  var INITIAL_DATA = {"ts":1781648220000,"current":1,"scores":{"1":{"bristol":{"ms":100,"ma":false,"mh":0,"ls":0,"la":false,"lh":0,"books":0},"bailey":{"ms":95,"ma":false,"mh":0,"ls":0,"la":false,"lh":0,"books":0}}}};
   /*SEND*/
 
   var editable = false;
@@ -454,6 +454,7 @@
   var memFallback = false;
   function save(){
     if(!editable) return; // read-only viewers never write data
+    state.ts = Date.now();
     try { window.localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
     catch(e){ memFallback = true; }
     flashSaved();
@@ -462,12 +463,20 @@
   function load(){
     // Start from the scores published in the file.
     state = deepCopy(INITIAL_DATA);
-    if(!state || !state.scores) state = { current:1, scores:{} };
+    if(!state || !state.scores) state = { current:1, scores:{}, ts:0 };
     if(!state.current) state.current = 1;
-    // On the scorekeeper's own device, a newer working copy may be saved locally.
+    var pubTs = (INITIAL_DATA && INITIAL_DATA.ts) ? INITIAL_DATA.ts : 0;
+    // Use the locally-saved working copy ONLY if it is newer than the published
+    // file. A freshly uploaded file always wins, so baked-in scores show up.
     try {
       var raw = window.localStorage.getItem(STORE_KEY);
-      if(raw){ var p = JSON.parse(raw); if(p && p.scores){ state = p; if(!state.current) state.current = 1; } }
+      if(raw){
+        var p = JSON.parse(raw);
+        if(p && p.scores){
+          var locTs = p.ts ? p.ts : 0;
+          if(locTs >= pubTs){ state = p; if(!state.current) state.current = 1; }
+        }
+      }
     } catch(e){ memFallback = true; }
   }
 
@@ -735,6 +744,7 @@
   }
 
   function publishFile(){
+    state.ts = Date.now(); // stamp so this file overrides older saved copies
     // Serialize the page with the body forced back to locked (view-only) so
     // whoever opens the published link can't edit without the code.
     var prevCls = document.body.className;
